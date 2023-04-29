@@ -1,4 +1,4 @@
-#Projeto Clinica São Romeu
+<h1>Projeto Clinica São Romeu</h1>
 
 <h2>Objetivo</h2>
 
@@ -29,25 +29,25 @@ A clínica médica São Romeu é uma instituição localizada em São Miguel do 
 
 <h2>Equipe</h2>
 
-<ul style="display: flex;">
+<ul style="display: flex; align=center;">
 
-<li style="display: flex; flex-direction: column;">
-![Alt text](https://github.com/AllanSmithll.png)
-<a href="https://github.com/AllanSmithll">
+<li style="display: flex; flex-direction: column; margin: 5px 0px 2px 5px">
+<img style="width:90px; height:90px;" src="https://github.com/AllanSmithll.png"/>
+<a style="text-decoration: None; font-size:1.4rem; " href="https://github.com/AllanSmithll">
 Allan Amâncio
 </a>
 </li>
 
-<li style="display: flex; flex-direction: column;">
-![Alt text](https://github.com/HanielCostaDaSilva.png)
-<a href="https://github.com/HanielCostaDaSilva.png">
+<li style="display: flex; flex-direction: column; margin: 5px 0px 2px 5px">
+<img style="width:90px; height:90px;" src="https://github.com/HanielCostaDaSilva.png"/>
+<a style="text-decoration: None; font-size:1.4rem; " href="https://github.com/HanielCostaDaSilva.png">
 Haniel Costa
 </a>
 </li>
 
-<li style="display: flex; flex-direction: column;">
-![Alt text](https://github.com/Souza1999.png)
-<a href="https://github.com/Souza1999">
+<li style="display: flex; flex-direction: column; margin: 5px 0px 2px 5px">
+<img style="width:90px; height:90px;" src="https://github.com/Souza1999.png"/>
+<a style="text-decoration: None; font-size:1.4rem; " href="https://github.com/Souza1999">
 Yuri Souza
 </a>
 </li>
