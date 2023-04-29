@@ -8,7 +8,7 @@
 
 <h2>Qual o problema a ser solucionado.</h2>
 <p> 
-A clínica médica São Romeu é uma instituição localizada em São Miguel do Taipu, embora seja uma das clínicas mais buscadas pelos moradores locais. Ela registra todos os seus dados de maneira arcaica, mas não por muito tempo, pois ela deseja migrar o quanto antes para um sistema informatizado, a fim de gerenciar  e melhorar o atendimento para seus pacientes.
+A clínica médica São Romeu é uma instituição localizada em São Miguel do Taipu. Embora seja uma das clínicas mais buscadas pelos moradores locais, ela registra todos os seus dados de maneira arcaica, mas não por muito tempo, pois ela deseja migrar o quanto antes para um sistema informatizado, a fim de gerenciar e melhorar o atendimento para seus pacientes.
 </p>
 
 <hr />
