@@ -1,6 +1,6 @@
 
 CREATE TABLE PACIENTE (
-    cpf char(13) NOT NULL PRIMARY KEY,
+    cpf char(11) NOT NULL PRIMARY KEY,
     Func_Cadastrante char(5) Not Null, 
     Nome varChar(50) Not Null, 
     estado_urgencia int Not Null,
@@ -12,11 +12,11 @@ CREATE TABLE PACIENTE (
 
 CREATE TABLE FUNCIONARIO (
     matricula char(5) Not Null PRIMARY KEY,
-    CPF char(13) Not Null UNIQUE,
+    CPF char(11) Not Null UNIQUE,
     Nome varChar(50) Not Null,
     funcao varChar(15) Not Null,
     salario Decimal(10,2) Not Null,   
-    Supervisor char(5) Not Null,
+    Supervisor char(5),
     Data_nascimento date Not Null,
     Data_admissao date Not Null
 );
@@ -27,9 +27,8 @@ CREATE TABLE MEDICO (
     EspId int Not Null
 );
 
-CREATE TABLE REMEDIO (
-    id Serial  PRIMARY KEY   Not Null ,
-    nome varChar(15) Not Null,
+CREATE TABLE REMEDIO_RECEITADO (
+    nome varChar(25) Not Null,
     receita int Not Null
 );
 
@@ -40,7 +39,7 @@ CREATE TABLE ESPECIALIDADE (
 );
 
 CREATE TABLE RECEITA(
-    id Serial  PRIMARY KEY   Not NUll ,
+    id Serial  PRIMARY KEY  Not NUll ,
     MatMedico char(5) Not Null,
     CPFPaciente char(13) Not Null,
     Descricao text Not Null,
@@ -48,8 +47,8 @@ CREATE TABLE RECEITA(
     Data_Validade date Not Null
 );
 
-CREATE TABLE Numero_telefone (
-    pacienteCPF char(13) NOT NULL,
+CREATE TABLE Numero_Telefone_Paciente(
+    pacienteCPF char(11) NOT NULL,
     Numero_telefone char(11) Not Null,
     PRIMARY KEY (pacienteCPF, Numero_telefone)
 );
@@ -73,7 +72,7 @@ ALTER TABLE MEDICO ADD CONSTRAINT EspId_FK
     REFERENCES ESPECIALIDADE (id)
     ON DELETE CASCADE;
  
-ALTER TABLE REMEDIO ADD CONSTRAINT receita_FK
+ALTER TABLE REMEDIO_RECEITADO ADD CONSTRAINT receita_FK
     FOREIGN KEY (receita)
     REFERENCES RECEITA (id)
     ON DELETE CASCADE;
@@ -86,6 +85,6 @@ ALTER TABLE RECEITA ADD CONSTRAINT FK_RECEITA_3
     FOREIGN KEY (CPFPaciente)
     REFERENCES PACIENTE (cpf);
  
-ALTER TABLE Numero_telefone ADD CONSTRAINT FK_Numero_telefone_2
+ALTER TABLE Numero_Telefone_Paciente ADD CONSTRAINT FK_Numero_telefone_2
     FOREIGN KEY (pacienteCPF)
     REFERENCES PACIENTE (cpf);

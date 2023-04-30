@@ -1,34 +1,42 @@
 create or replace function inserirFuncionario(
     matricula char(5),
-    CPF char(13),
+    CPF char(11),
     Nome varChar(50),
     funcao varChar(15),
-    salario Decimal(2),
-    Supervisor char(5),
+    salario Decimal(10,2),
     Data_nascimento date,
-    Data_admissao date
+    Data_admissao date,
+	Supervisor char(5) default NULL,
+    crmInserir char(6) default NULL,
+    espIdInserir int default NULL
 ) returns void as $$ 
     Begin 
         if salario < 0.0 then RAISE EXCEPTION  'O valor não pode ser negativo.'; 
         end if;
 
-        if DATEDIF(year, Data_Nascimento, getDate()) < 18 then Raise Exception'O funcionário é menor de idade.'; 
-        end if;
+    	IF age(Data_Nascimento) < interval '18 years' THEN 
+        	RAISE EXCEPTION 'O funcionário é menor de idade.'; 
+    	END IF;
 
         insert into FUNCIONARIO values(
                 matricula,
                 cpf,
+				nome,
                 funcao,
                 salario,
                 Supervisor,
                 Data_Nascimento,
                 Data_admissao
             );
-        end;
-    $$ LANGUAGE 'plpgsql';
+        
+        if crmInserir is not Null then 
+        	insert into MEDICO values(upper(matricula), crmInserir, espIdInserir);
+		end if;
+   	end;
+$$ LANGUAGE 'plpgsql';
 
 CREATE or replace Function inserirPaciente(
-    cpf char(13),
+    cpf char(11),
     Func_Cadastrante char(5),
     Nome varChar(50),
     estado_urgencia int,
@@ -44,6 +52,7 @@ insert into Paciente values( cpf, Func_Cadastrante, Nome, estado_urgencia, Data_
 end;
 
 $$ LANGUAGE 'plpgsql';
+
 
 CREATE or replace Function inserirEspecialidade (
     descricaoInserir Varchar(45),
@@ -70,3 +79,39 @@ returns void as $$
     end;
 
 $$ LANGUAGE 'plpgsql';
+
+
+create or replace function inserirTelefonePaciente(
+    pacienteCPF char(11),
+    Numero_telefone char(11)
+) returns void as $$    
+    
+    Begin
+        INSERT INTO Numero_telefone VALUES (pacienteCPF, Numero_telefone);
+
+    end;
+$$LANGUAGE 'plpgsql';
+
+create or replace function inserirReceitaMedica(
+    MatMedico char(5) ,
+    CPFPaciente char(13) ,
+    Descricao text ,
+    Data_Realizacao date ,
+    Data_Validade date,
+    remediosReceitados text[] DEFAULT '{}'
+) returns void as $$
+
+    Declare
+        ReceitaId Receita.id%type;
+		 v_remedio TEXT;
+
+    Begin
+        INSERT INTO Receita  VALUES (default, MatMedico, CPFPaciente, Descricao, Data_Realizacao,Data_Validade) RETURNING id INTO ReceitaId;
+ 		 
+		FOREACH v_remedio IN ARRAY remediosReceitados LOOP
+        
+			INSERT INTO REMEDIO_RECEITADO VALUES (ReceitaId, v_remedio);
+        
+		END LOOP;
+    END;
+$$LANGUAGE 'plpgsql';
