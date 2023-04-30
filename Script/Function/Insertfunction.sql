@@ -1,3 +1,4 @@
+-- Funções usadas na Base de Dados da clínica
 create or replace function inserirFuncionario(
     matricula char(5),
     CPF char(11),

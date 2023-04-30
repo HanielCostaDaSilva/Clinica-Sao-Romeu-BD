@@ -1,3 +1,4 @@
+-- Testes com as functions criadas
 select inserirEspecialidade('Oftamologia',90.04);
 select inserirEspecialidade('Pediatria',120.05);
 select inserirEspecialidade('otorrinolaringologia ',150.05);
@@ -6,17 +7,17 @@ select * from especialidade;
 
 /*Supervisores*/
 select inserirFuncionario('JULME','12345678901','Julieta Capuleto','Diretora',5359.32,'03-01-1983', '12-05-2020');
-select inserirFuncionario('MARAS','39834594958','Maria Claudia','Atendentimento',2492.42,'02-10-2000', '01-04-2019','JULME');
+select inserirFuncionario('MARAS','39834594958','Maria Claudia','Atendimento',2492.42,'02-10-2000', '01-04-2019','JULME');
 select inserirFuncionario('METIA','22345078901','Melissa Gracias','Pediatra',5590.22, '07-11-1990', '1-12-2021','JULME','123456',2);
 select * from FUNCIONARIO;
 
 /*Funcionários Normais*/
-select inserirFuncionario('JOMTE','56734594949','jOAQUIM FAGUNDES','Atendentimento',2092.32,'09-01-1999', '01-05-2020','MARAS');
+select inserirFuncionario('JOMTE','56734594949','jOAQUIM FAGUNDES','Atendimento',2092.32,'09-01-1999', '01-05-2020','MARAS');
 select inserirFuncionario('QUEMT','50754594993','Quirino Gracias','Zeladoria',1609.93,'05-11-1989', '23-09-2020','MARAS');
 select inserirFuncionario('IRTMA','12754594938','Iracema Gracias','Zeladoria',1609.93,'03-01-1990', '12-05-2020','MARAS');
 select inserirFuncionario('JOIEC','45958958459','Joana Maria','Motorista',1390.12,'07-11-2000', '1-12-2021');
-select inserirFuncionario('atufo','91889438403','Atélio Marcos','Enfermaria',2390.12,'02-11-1999', '1-03-2021','MARAS');
-select inserirFuncionario('kjdfd','37837530942','Joana Maria','Enfermaria',2390.12,'02-11-1999', '1-03-2021','MARAS');
+select inserirFuncionario('ATUFO','91889438403','Atélio Marcos','Enfermaria',2390.12,'02-11-1999', '1-03-2021','MARAS');
+select inserirFuncionario('KJDFD','37837530942','Joana Maria','Enfermaria',2390.12,'02-11-1999', '1-03-2021','MARAS');
 select * from FUNCIONARIO;
 
 /*Médicos*/
