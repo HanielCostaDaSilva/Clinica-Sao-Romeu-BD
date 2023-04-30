@@ -18,16 +18,7 @@ create or replace function inserirFuncionario(
         	RAISE EXCEPTION 'O funcionário é menor de idade.'; 
     	END IF;
 
-        insert into FUNCIONARIO values(
-                matricula,
-                cpf,
-				nome,
-                funcao,
-                salario,
-                Supervisor,
-                Data_Nascimento,
-                Data_admissao
-            );
+        insert into FUNCIONARIO values(matricula, cpf, nome, funcao, salario, Supervisor, Data_Nascimento, Data_admissao);
         
         if crmInserir is not Null then 
         	insert into MEDICO values(upper(matricula), crmInserir, espIdInserir);
@@ -43,15 +34,29 @@ CREATE or replace Function inserirPaciente(
     Data_Nascimento DATE,
     Rua varChar(50),
     Bairro varChar(40),
-    Cidade varChar(30)
+    Cidade varChar(30),
+    Numeros_telefones text[] DEFAULT '{}'
+
 ) returns void as $$
 
-Begin
-insert into Paciente values( cpf, Func_Cadastrante, Nome, estado_urgencia, Data_Nascimento, Rua, Bairro, Cidade);
+    Declare
+    v_telefone text;
+    Begin
 
-end;
+        IF estado_urgencia >10 or estado_urgencia < 1  then RAISE EXCEPTION 'Foi inserido um valor inválido no nível de Emergência.';
+    end if;
+
+    insert into Paciente values( cpf, Func_Cadastrante, Nome, estado_urgencia, Data_Nascimento, Rua, Bairro, Cidade);
+
+        FOREACH v_telefone in Array Numeros_telefones LOOP
+            
+            select inserirTelefonePaciente(cpf,v_telefone);
+
+        end LOOP;
+    end;
 
 $$ LANGUAGE 'plpgsql';
+
 
 
 CREATE or replace Function inserirEspecialidade (
@@ -74,7 +79,6 @@ returns void as $$
             ELSE 
                 INSERT INTO Especialidade VALUES (default, lower(descricaoInserir), preco_consultaInserir);
             END IF;
-        
         END IF;
     end;
 
