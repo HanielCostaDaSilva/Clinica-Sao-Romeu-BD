@@ -28,8 +28,8 @@ CREATE TABLE MEDICO (
 );
 
 CREATE TABLE REMEDIO_RECEITADO (
-    nome varChar(25) Not Null,
-    receita int Not Null
+    receitaId int Not Null,
+	nome varChar(25) Not Null
 );
 
 CREATE TABLE ESPECIALIDADE (
