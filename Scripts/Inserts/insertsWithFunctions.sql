@@ -28,3 +28,13 @@ select inserirFuncionario('FEJSA','13424462564','Felipe Jorge','Otorrino',4999.2
 select inserirFuncionario('LOSJF','13424562564','Lorena Cerrana','Otorrino',4999.22, '01-12-1989', '1-11-2020','METIA','129454',3);
 select * from MEDICO;
 select * from FUNCIONARIO;
+
+/*Pacientes*/
+select inserirPaciente('82691696191', 'JOMTE', 'Allan Alves Amancio', 1, '04-11-2004', 'Rua Chá de Camomila', 'Centro', 'São Miguel de Taipu', ARRAY['83982292523', '83986751649']);
+select inserirPaciente('81763444962', 'MARAS', 'João Silva', 2, '1990-05-15', 'Rua 2 de Novembro', 'Centro', 'São Miguel de Taipu', ARRAY['83912345678', '83987654321']);
+select inserirPaciente('30729081210', 'JOMTE', 'Maria Souza', 1, '1985-09-20', 'Rua Laranja', 'Café do Vento', 'Sobrado', ARRAY['83911111111', '83922222222']);
+select inserirPaciente('17583999459', 'MARAS', 'Pedro Santos', 3, '2000-03-10', 'Rua Batista', 'Centro', 'São Miguel de Taipu', ARRAY['83933333333']);
+select inserirPaciente('61814352624', 'JOMTE', 'Ana Oliveira', 1, '1995-07-02', 'Avenida São Jorge', 'Centro', 'São Miguel de Taipu', ARRAY['83944444444']);
+select inserirPaciente('98521676000', 'MARAS', 'Lucas Rodrigues', 2, '1980-12-30', 'Avenida Josemar', 'Amarelas', 'Pilar', ARRAY['83955555555']);
+select * from PACIENTE;
+select * from Numero_Telefone_Paciente;
