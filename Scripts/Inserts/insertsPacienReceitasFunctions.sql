@@ -5,10 +5,10 @@ select inserirPaciente('30729081210', 'JOMTE', 'Maria Souza', 1, '1985-09-20', '
 select inserirPaciente('17583999459', 'MARAS', 'Pedro Santos', 3, '2000-03-10', 'Rua Batista', 'Centro', 'São Miguel de Taipu', ARRAY['83933333333']);
 select inserirPaciente('61814352624', 'JOMTE', 'Ana Oliveira', 1, '1995-07-02', 'Avenida São Jorge', 'Centro', 'São Miguel de Taipu', ARRAY['83944444444']);
 select inserirPaciente('98521676000', 'MARAS', 'Lucas Rodrigues', 2, '1980-12-30', 'Avenida Josemar', 'Amarelas', 'Pilar', ARRAY['83955555555']);
-select inserirPaciente('82691692345', 'JOMTE', 'Pedro Alves', 3, '1998-12-10', 'Rua dos Bobos, 0', 'Jardim Amália', 'Itabaiana', ARRAY['83912345678', '83998765432']);
-select inserirPaciente('73536904461', 'JOMTE', 'Bruna Bastos', 4, '2000-02-20', 'Rua das Flores, 10', 'Centro', 'São Miguel de Taipu', ARRAY['83911112222']);
-select inserirPaciente('24874727359', 'JOMTE', 'Carlos Cunha', 1, '1985-05-05', 'Av. Paulista, 1000', 'Bela Vista', 'Pilar', ARRAY['83933334444', '83955556666']);
-select inserirPaciente('00593248718', 'JOMTE', 'Daniela Duarte', 2, '1972-10-22', 'Rua do Comércio, 500', 'Centro', 'São Miguel de Taipu', ARRAY['83977778888']);
+select inserirPaciente('82691692345', 'JOMTE', 'Pedro Alves', 3, '1998-12-10', 'Rua dos Bobos', 'Jardim Amália', 'Itabaiana', ARRAY['83912345678', '83998765432']);
+select inserirPaciente('73536904461', 'JOMTE', 'Bruna Bastos', 4, '2000-02-20', 'Rua das Flores', 'Centro', 'São Miguel de Taipu', ARRAY['83911112222']);
+select inserirPaciente('24874727359', 'JOMTE', 'Carlos Cunha', 1, '1985-05-05', 'Av. Paulista', 'Bela Vista', 'Pilar', ARRAY['83933334444', '83955556666']);
+select inserirPaciente('00593248718', 'JOMTE', 'Daniela Duarte', 2, '1972-10-22', 'Rua do Comércio', 'Centro', 'São Miguel de Taipu', ARRAY['83977778888']);
 select * from PACIENTE;
 select * from Numero_Telefone_Paciente;
 
