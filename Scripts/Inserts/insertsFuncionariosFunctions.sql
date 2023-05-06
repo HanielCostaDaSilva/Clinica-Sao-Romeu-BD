@@ -1,7 +1,7 @@
 -- Testes com as functions criadas
-select inserirEspecialidade('Oftamologia',90.04);
+select inserirEspecialidade('Oftalmologia',90.04);
 select inserirEspecialidade('Pediatria',120.05);
-select inserirEspecialidade('otorrinolaringologia ',150.05);
+select inserirEspecialidade('Otorrinolaringologia ',150.05);
 
 select * from especialidade;
 
@@ -12,7 +12,7 @@ select inserirFuncionario('METIA','22345078901','Melissa Gracias','Pediatra',559
 select * from FUNCIONARIO;
 
 /*Funcionários Normais*/
-select inserirFuncionario('JOMTE','56734594949','jOAQUIM FAGUNDES','Atendimento',2092.32,'09-01-1999', '01-05-2020','MARAS');
+select inserirFuncionario('JOMTE','56734594949','Joaquim Fagundes','Atendimento',2092.32,'09-01-1999', '01-05-2020','MARAS');
 select inserirFuncionario('QUEMT','50754594993','Quirino Gracias','Zeladoria',1609.93,'05-11-1989', '23-09-2020','MARAS');
 select inserirFuncionario('IRTMA','12754594938','Iracema Gracias','Zeladoria',1609.93,'03-01-1990', '12-05-2020','MARAS');
 select inserirFuncionario('JOIEC','45958958459','Joana Maria','Motorista',1390.12,'07-11-2000', '1-12-2021');
