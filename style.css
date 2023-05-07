@@ -1,0 +1,34 @@
+body{
+    padding:10px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+
+}
+
+h1{
+    text-align: center;
+    border-bottom: 10px solid ;
+    margin-bottom: 20px;
+}
+.roles{
+    font-size:2.4rem;
+    font-weight: bold;
+    margin: 15px 0;    
+}
+
+.titulos{
+    font-size:1.8rem;
+    text-decoration: underline;
+    color:rgb(108, 108, 113);
+    list-style: none;
+}
+
+.topicos{
+    font-size:1.3rem;
+    padding: 10px;
+    margin-left: 5rem;
+    list-style: none;
+}
+
+.container{
+    box-shadow: 2px 2px 4px 2px #cccccc;
+}
