@@ -38,6 +38,5 @@ from receita r
 	inner join especialidade e on m.espid = e.id
 group by e.descricao;
 
-select * from arrecadacoPorEspecialidade;
+	select * from arrecadacoPorEspecialidade;
 
-select * from receita;
