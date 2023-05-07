@@ -10,7 +10,7 @@ begin
   set salario = novosalario
   where matricula = codigofuncionario;
   if not found then
-    raise exception 'Funcionário com código % não encontrado.', codigofuncionario;
+    raise notice 'Funcionário com código % não encontrado.', codigofuncionario;
   end if;
 end;
 $$ language plpgsql;
@@ -38,7 +38,7 @@ begin
 	set salario = salario * (1+ percentual/100)
 	where funcao = cargo;
 	if not found then
-		raise exception 'Cargo (%) não encontrado', cargo;
+		raise notice 'Cargo (%) não encontrado', cargo;
 	end if;
 end;
 $$ language 'plpgsql';
@@ -62,7 +62,7 @@ begin
 	set salario = novoPisoSalarial
 	where funcao = cargo;
 	if not found then
-		raise exception 'Cargo (%) não encontrado.', cargo;
+		raise notice 'Cargo (%) não encontrado.', cargo;
 	end if;
 end;
 $$ language 'plpgsql';
