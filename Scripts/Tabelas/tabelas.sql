@@ -88,8 +88,3 @@ ALTER TABLE RECEITA ADD CONSTRAINT FK_RECEITA_3
 ALTER TABLE Numero_Telefone_Paciente ADD CONSTRAINT FK_Numero_telefone_2
     FOREIGN KEY (pacienteCPF)
     REFERENCES PACIENTE (cpf);
-
-
-select * 
-from receita r inner join medico m on m.matricula = r.matmedico
-where m.matricula= 	'RUMCA'; 

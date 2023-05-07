@@ -38,5 +38,23 @@ from receita r
 	inner join especialidade e on m.espid = e.id
 group by e.descricao;
 
-	select * from arrecadacoPorEspecialidade;
+select * from arrecadacoPorEspecialidade;
 
+/*View que apresenta o relatório médico das consultas.*/
+create or replace View relatorioMedico as
+select f.nome as nome_medico,
+		m.matricula as matricula_medico,
+		f.funcao,
+		r.data_realizacao,
+		e.preco_consulta as valor,
+		p.nome as nome_paciente,
+		r.cpfpaciente,
+		rr.nome as remedio
+FROM receita r
+	inner join medico m on m.Matricula = r.MatMedico
+	inner join funcionario f on f.Matricula = m.Matricula
+	inner join paciente p on p.CPF = r.CPFPaciente
+	inner join remedio_receitado rr on rr.receitaId = r.id
+	inner join especialidade e on e.id = m.espid;
+
+select *  from relatorioMedico;
