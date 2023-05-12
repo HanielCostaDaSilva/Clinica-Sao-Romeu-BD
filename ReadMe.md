@@ -13,7 +13,7 @@ A clínica médica São Romeu é uma instituição localizada em São Miguel do 
 
 <hr />
 
-<h2>Requesitos da Aplicação</h2>
+<h2>Requisitos da Aplicação</h2>
 
 <ul >
     <li>Registrar os pacientes. </li>
