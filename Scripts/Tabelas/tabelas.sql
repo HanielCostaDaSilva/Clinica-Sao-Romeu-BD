@@ -29,7 +29,7 @@ CREATE TABLE MEDICO (
 
 CREATE TABLE REMEDIO_RECEITADO (
     receitaId int Not Null,
-	nome varChar(25) Not Null
+    descricao varChar(25) Not Null
 );
 
 CREATE TABLE ESPECIALIDADE (
