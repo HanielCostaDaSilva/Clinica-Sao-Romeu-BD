@@ -1,7 +1,7 @@
 -- Testes com as functions criadas
-select inserirEspecialidade('Oftalmologia',90.04);
-select inserirEspecialidade('Pediatria',120.05);
-select inserirEspecialidade('Otorrinolaringologia ',150.05);
+select inserirEspecialidade('Oftalmologia',90.00);
+select inserirEspecialidade('Pediatria',120.00);
+select inserirEspecialidade('Otorrinolaringologia ',150.00);
 
 select * from especialidade;
 
