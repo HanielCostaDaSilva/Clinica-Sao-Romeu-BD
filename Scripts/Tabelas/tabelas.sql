@@ -30,6 +30,7 @@ CREATE TABLE MEDICO (
 CREATE TABLE REMEDIO_RECEITADO (
     receitaId int Not Null,
     descricao text Not Null
+
 );
 
 CREATE TABLE ESPECIALIDADE (
@@ -80,7 +81,8 @@ ALTER TABLE REMEDIO_RECEITADO ADD CONSTRAINT receita_FK
     FOREIGN KEY (receitaId)
     REFERENCES RECEITA (id)
     ON DELETE CASCADE;
- 
+
+
 ALTER TABLE RECEITA ADD CONSTRAINT FK_RECEITA_3
     FOREIGN KEY (CPFPaciente)
     REFERENCES PACIENTE (cpf);
@@ -90,14 +92,15 @@ ALTER TABLE Numero_Telefone_Paciente ADD CONSTRAINT FK_Numero_telefone_2
     REFERENCES PACIENTE (cpf);
 
 
-Alter TABLE PACIENTE add  constraint checkEstadoUrgencia  check (estado_urgencia < 6 && estado_urgencia > 0 );
+Alter TABLE PACIENTE add  constraint checkEstadoUrgencia  check (estado_urgencia < 6 and estado_urgencia > 0 );
 Alter TABLE PACIENTE add  constraint checkData_Nascimento  check (Data_Nascimento < current_date);
 
-Alter TABLE FUNCIONARIO add  constraint checkData_nascimento check (Data_nascimento < current_date && age(Data_Nascimento) < interval '18 years');
 Alter TABLE FUNCIONARIO add  constraint checkData_admissao check (Data_admissao <= current_date);
+
 Alter TABLE FUNCIONARIO add  constraint checkSalario check (salario > 0.0);
 
 Alter TABLE ESPECIALIDADE add  constraint checkPreco_consulta check (preco_consulta >= 0.0);
 
 Alter TABLE RECEITA add  constraint checkData_Realizacao check (Data_Realizacao <= current_date);
-Alter TABLE RECEITA add  constraint checkData_Validade check (data_Validade <= current_date && age(data_Validade) <= interval '30 days');
+
+Alter Table REMEDIO_RECEITADO add constraint receita_Pk PRIMARY KEY (receitaId, descricao);
