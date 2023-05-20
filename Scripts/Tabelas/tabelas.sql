@@ -27,12 +27,6 @@ CREATE TABLE MEDICO (
     EspId int Not Null
 );
 
-CREATE TABLE REMEDIO_RECEITADO (
-    receitaId int Not Null,
-    descricao text Not Null
-
-);
-
 CREATE TABLE ESPECIALIDADE (
     id Serial  PRIMARY KEY   Not Null ,
     descricao Varchar(45) UNIQUE Not Null,
@@ -48,11 +42,34 @@ CREATE TABLE RECEITA(
     Data_Validade date Not Null
 );
 
+/*!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!*/
+/*Alterações  NOVAS!!!!!!!!*/
+
+
+CREATE TABLE REMEDIO(
+    id serial Not Null PRIMARY KEY,
+    descricao text Not Null
+);
+
+CREATE TABLE PRESCRICAO (
+    idReceita int,
+    idRemedio int,
+    PRIMARY KEY (idReceita, idRemedio)
+);
+ 
+ALTER TABLE PRESCRICAO ADD CONSTRAINT FK_PRESCRICAO1
+    FOREIGN KEY (idRemedio)
+    REFERENCES REMEDIO (id);
+
+Alter table PRESCRICAO add constraint FK_PRESCRICAO2 FOREIGN KEY (idReceita) REFERENCES RECEITA (id);
+
+/*!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!*/
 CREATE TABLE Numero_Telefone_Paciente(
     pacienteCPF char(11) NOT NULL,
     Numero_telefone char(11) Not Null,
     PRIMARY KEY (pacienteCPF, Numero_telefone)
 );
+
  
 ALTER TABLE PACIENTE ADD CONSTRAINT Func_Cadastrante_FK
     FOREIGN KEY (Func_Cadastrante)
@@ -77,13 +94,8 @@ ALTER TABLE RECEITA ADD CONSTRAINT MatMedico_FK
     FOREIGN KEY (MatMedico)
     REFERENCES MEDICO (Matricula);
 
-ALTER TABLE REMEDIO_RECEITADO ADD CONSTRAINT receita_FK
-    FOREIGN KEY (receitaId)
-    REFERENCES RECEITA (id)
-    ON DELETE CASCADE;
 
-
-ALTER TABLE RECEITA ADD CONSTRAINT FK_RECEITA_3
+ALTER TABLE RECEITA ADD CONSTRAINT CPFPacient_Fk
     FOREIGN KEY (CPFPaciente)
     REFERENCES PACIENTE (cpf);
  

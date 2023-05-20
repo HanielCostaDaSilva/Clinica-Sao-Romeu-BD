@@ -77,6 +77,48 @@ create or replace function inserirTelefonePaciente(
     end;
 $$LANGUAGE 'plpgsql';
 
+
+/*!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!*/
+/*Alterações  NOVAS!!!!!!!!*/
+
+/*Dá para transformar em trigger*/
+create or replace function inserirRemedio(
+    nomeRemedio text
+) returns int as $$
+    
+    Declare
+        remedioNewId Remedio.id%type;
+
+    begin
+        select id into remedioNewId from Remedio r where lower(r.descricao) like lower(nomeRemedio);
+
+        if remedioNewId is Null then
+            select COALESCE(max(id) + 1, 1) into remedioNewId from remedio;
+            insert into Remedio values (remedioNewId,nomeRemedio);
+        end If;
+        
+        return remedioNewId;
+    end;
+
+    $$ LANGUAGE 'plpgsql';
+    
+
+ 
+create or replace function inserirPrescricao(
+    receitaId PRESCRICAO.idReceita%type,
+    remedioNome text
+)returns void as  $$
+    
+    Declare
+    remedioId Remedio.id%type;
+    begin
+
+        remedioId := inserirRemedio(remedioNome);
+        insert into PRESCRICAO values (receitaId, remedioId);
+
+    end; 
+    $$ LANGUAGE 'plpgsql';
+
 create or replace function inserirReceitaMedica(
     MatMedico char(5) ,
     CPFPaciente char(13) ,
@@ -85,13 +127,23 @@ create or replace function inserirReceitaMedica(
     Data_Validade date,
     remediosReceitados text[] DEFAULT '{}'
 ) returns void as $$
+    
     Declare
-        ReceitaId Receita.id%type;
+        receitaId Receita.id%type;
 		 v_remedio TEXT;
+    
     Begin
-        INSERT INTO Receita  VALUES (default, MatMedico, CPFPaciente, Descricao, Data_Realizacao,Data_Validade) RETURNING id INTO ReceitaId;
-		FOREACH v_remedio IN ARRAY remediosReceitados LOOP
-			INSERT INTO REMEDIO_RECEITADO VALUES (ReceitaId, v_remedio);
-		END LOOP;
+
+        select COALESCE(max(id) +1, 1) into receitaId from Receita;
+
+        INSERT INTO Receita  VALUES (receitaId, MatMedico, CPFPaciente, Descricao, Data_Realizacao,Data_Validade);
+
+        if array_length(remediosReceitados,1) > 0 then 
+            
+            FOREACH v_remedio IN ARRAY remediosReceitados LOOP
+                PERFORM inserirPrescricao(receitaId, v_remedio);
+            END LOOP;
+        End If;
     END;
-$$LANGUAGE 'plpgsql';
+$$ LANGUAGE 'plpgsql';
+/*!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!*/

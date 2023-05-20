@@ -22,8 +22,6 @@ from receita r
 	inner join especialidade e on m.espid = e.id
 group by e.descricao;
 
-select * from arrecadacoPorEspecialidade;
-
 /*View que permitirá inserção de dados.*/
 /*View que apressenta um catálogo a respeito das especialidades oferecidas e seus respectivos preços*/
 
