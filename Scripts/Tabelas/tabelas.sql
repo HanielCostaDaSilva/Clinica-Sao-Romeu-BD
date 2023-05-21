@@ -114,5 +114,3 @@ Alter TABLE FUNCIONARIO add  constraint checkSalario check (salario > 0.0);
 Alter TABLE ESPECIALIDADE add  constraint checkPreco_consulta check (preco_consulta >= 0.0);
 
 Alter TABLE RECEITA add  constraint checkData_Realizacao check (Data_Realizacao <= current_date);
-
-Alter Table REMEDIO_RECEITADO add constraint receita_Pk PRIMARY KEY (receitaId, descricao);
