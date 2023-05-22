@@ -1,31 +1,72 @@
 -- Funções usadas na Base de Dados da clínica
+-- Funções usadas na Base de Dados da clínica
+create or replace function inserirCargo(
+	funcao text,
+	salario_base decimal default 0.0
+) RETURNS void  as $$
+
+    Declare
+    newId integer;
+    begin
+        select COALESCE(max(id)+ 1,1) INTO newId from CARGO;
+
+        IF salario_base < 0 THEN
+            RAISE EXCEPTION 'O salário base não pode ser negativo.';
+        
+        end if;
+     
+        insert into CARGO values(newId, lower(funcao), salario_base);
+
+        
+        exception
+            when unique_violation then  raise exception 'funcao %, já havia sido inserida', funcao;
+    end;
+
+$$ LANGUAGE 'plpgsql';
+
+
 create or replace function inserirFuncionario(
     matricula char(5),
     CPF char(11),
-	Supervisor char(5) default NULL,
     Nome varChar(50),
 	Data_nascimento date,
 	Data_admissao date,
-	idCargo integer default NULL,
-    percentualBonus int,
+    cargoInserir text default null,
+    percentualBonus int default 0,
+    Supervisor char(5) default NULL,
     crmInserir char(6) default NULL,
     espIdInserir int default NULL
 ) returns void as $$ 
+
+    declare 
+        newIdCargo integer;
+
     Begin 
         if percentualBonus < 0 then RAISE EXCEPTION  'O valor não pode ser negativo.'; 
         end if;
+    
     	IF age(Data_nascimento) < interval '18 years' THEN 
         	RAISE EXCEPTION 'O funcionário é menor de idade.'; 
     	END IF;
-        insert into FUNCIONARIO (matricula, CPF, Supervisor, Nome, Data_Nascimento,
-								 Data_Admissao, idCargo, percentualBonus)
-		values (matricula, CPF, Supervisor, Nome, Data_nascimento,
-									   Data_admissao, idCargo, percentualBonus);
+
+        if cargoInserir is not null then
+            
+            begin 
+                perform inserirCargo(cargoInserir);
+            exception when Others then 
+            Null;
+                
+            end;
+            select id INTO newIdCargo from CARGO where funcao= lower(cargoInserir);
+        end if;
+       
+        insert into FUNCIONARIO values (matricula, CPF, Supervisor, Nome, Data_nascimento, Data_admissao, newIdCargo, percentualBonus);
         if crmInserir is not Null then 
         	insert into MEDICO values(upper(matricula), crmInserir, espIdInserir);
 		end if;
    	end;
 $$ LANGUAGE 'plpgsql';
+
 
 CREATE or replace Function inserirPaciente(
     cpf char(11),
@@ -130,9 +171,8 @@ create or replace function inserirReceitaMedica(
 ) returns void as $$
     
     Declare
-        receitaId Receita.id%type;
-		 v_remedio TEXT;
-    
+        receitaId integer;
+		 v_remedio TEXT;    
     Begin
 
         select COALESCE(max(id) +1, 1) into receitaId from Receita;
@@ -148,53 +188,3 @@ create or replace function inserirReceitaMedica(
     END;
 $$ LANGUAGE 'plpgsql';
 
-CREATE OR REPLACE FUNCTION inserirCargo (
-    funcaoInserir varchar(45),
-    salario_baseInserir decimal(10, 2)
-) 
-RETURNS void AS $$
-DECLARE
-    cargoCadastrado cargo.id%TYPE;
-    c_new_id integer;
-BEGIN
-    SELECT C.id INTO cargoCadastrado
-    FROM cargo C
-    WHERE C.funcao ILIKE lower(funcaoInserir);
-    
-    IF salario_baseInserir < 0.0 THEN
-        RAISE EXCEPTION 'O salário base não pode ser negativo.';
-    ELSE
-        IF cargoCadastrado IS NOT NULL THEN
-            UPDATE cargo
-            SET salario_base = salario_baseInserir
-            WHERE id = cargoCadastrado;
-        ELSE
-            SELECT COALESCE(MAX(id) + 1, 1) INTO c_new_id FROM cargo;
-            INSERT INTO cargo (id, funcao, salario_base)
-            VALUES (c_new_id, lower(funcaoInserir), salario_baseInserir);
-			raise notice 'Cargo inserido com sucesso!';
-        END IF;
-    END IF;
-END;
-$$ LANGUAGE plpgsql;
-
-
-
-create or replace function inserirCargo(
-	funcao text,
-	salario_base integer default 0
-) as $$
-
-    Declare
-    newId integer;
-    begin
-    newId:= select COALESCE(max(id)+ 1,1) from CARGO;
-
-    begin
-        insert into CARGO values(newId, lower(funcao), salario_base (decimal));
-    exception
-        when sqlstate 'P0003' then raise exception 'o cargo: % já existe!',funcao;
-    end;
-
-    end;
-$$LANGUAGE 'plpgsql'
