@@ -78,9 +78,6 @@ create or replace function inserirTelefonePaciente(
 $$LANGUAGE 'plpgsql';
 
 
-/*!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!*/
-/*Alterações  NOVAS!!!!!!!!*/
-
 /*Dá para transformar em trigger*/
 create or replace function inserirRemedio(
     nomeRemedio text
@@ -103,7 +100,6 @@ create or replace function inserirRemedio(
     $$ LANGUAGE 'plpgsql';
     
 
- 
 create or replace function inserirPrescricao(
     receitaId PRESCRICAO.idReceita%type,
     remedioNome text
@@ -146,4 +142,23 @@ create or replace function inserirReceitaMedica(
         End If;
     END;
 $$ LANGUAGE 'plpgsql';
-/*!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!!===!*/
+
+
+create or replace function inserirCargo(
+	funcao text,
+	salario_base integer default 0
+) as $$
+
+    Declare
+    newId integer;
+    begin
+    newId:= select COALESCE(max(id)+ 1,1) from CARGO;
+
+    begin
+        insert into CARGO values(newId, lower(funcao), salario_base (decimal));
+    exception
+        when sqlstate 'P0003' then raise exception 'o cargo: % já existe!',funcao;
+    end;
+
+    end;
+$$LANGUAGE 'plpgsql'
