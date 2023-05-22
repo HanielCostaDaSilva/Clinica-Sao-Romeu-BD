@@ -22,9 +22,9 @@ from receita r
 	inner join especialidade e on m.espid = e.id
 group by e.descricao;
 
+
 /*View que permitirá inserção de dados.*/
 /*View que apressenta um catálogo a respeito das especialidades oferecidas e seus respectivos preços*/
-
 create or replace View catalogoEspecialidade(descricao, preco) as
 select descricao as "Especialidade",  to_char(preco_consulta, 'R$999,999,999.99')  as "consulta"
 from especialidade;
