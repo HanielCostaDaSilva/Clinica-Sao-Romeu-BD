@@ -1,9 +1,21 @@
 -- Testes com as functions criadas
+-- Especialidades
 select inserirEspecialidade('Oftalmologia',90.00);
 select inserirEspecialidade('Pediatria',120.00);
-select inserirEspecialidade('Otorrinolaringologia ',150.00);
-
+select inserirEspecialidade('Otorrinolaringologia',150.00);
 select * from especialidade;
+
+-- Cargos
+select inserirCargo('Diretor', 8000.00);
+select inserirCargo('Pediatra', 5500.00);
+select inserirCargo('Atendente', 2500.00);
+select inserirCargo('Zelador', 2100.00);
+select inserirCargo('Motorista', 1600.00);
+select inserirCargo('Enfermeiro', 4750.00);
+select inserirCargo('Otorrino', 5000.00);
+select inserirCargo('Oftalmologo', 5400.00);
+
+select * from cargo;
 
 /*Supervisores*/
 select inserirFuncionario('JULME','12345678901','Julieta Capuleto','Diretora',5359.32,'03-01-1983', '12-05-2020');
