@@ -28,21 +28,21 @@ CREATE TABLE FUNCIONARIO (
 );
 
 CREATE TABLE CARGO (
-	id serial PRIMARY KEY,
+	id serial PRIMARY KEY Not Null,
 	funcao varchar(45) UNIQUE Not Null,
 	salario_base decimal(10,2) Not null
-);
-
-CREATE TABLE MEDICO (
-    Matricula char(5) PRIMARY KEY Not Null,
-    crm char(6) UNIQUE Not Null,
-    EspId int Not Null
 );
 
 CREATE TABLE ESPECIALIDADE (
     id Serial  PRIMARY KEY   Not Null ,
     descricao Varchar(45) UNIQUE Not Null,
     preco_consulta Decimal(10,2) Not Null
+);
+
+CREATE TABLE MEDICO (
+    Matricula char(5) PRIMARY KEY Not Null,
+    crm char(6) UNIQUE Not Null,
+    EspId int Not Null
 );
 
 CREATE TABLE RECEITA(
