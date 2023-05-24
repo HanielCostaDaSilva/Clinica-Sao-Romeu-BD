@@ -102,65 +102,56 @@ create or replace function inserirCargo(
 	salario_base decimal default 0.0
 ) RETURNS void  as $$
 
-    Declare
-    newId integer;
-    begin
-        select COALESCE(max(id)+ 1,1) INTO newId from CARGO;
+Declare newId integer; begin
 
-        IF salario_base < 0 THEN
-            RAISE EXCEPTION 'O salário base não pode ser negativo.';
-        end if;
-
-        begin 
-            insert into CARGO values(newId, lower(funcao), salario_base);
-        exception
-            when unique_violation then  raise exception 'funcao %, já havia sido inserida', funcao;
-        end;
+SELECT  COALESCE(MAX(id)+ 1,1) INTO newId
+FROM CARGO; IF salario_base < 0 THEN RAISE EXCEPTION 'O salário base não pode ser negativo.'; end if; begin
+INSERT INTO CARGO 
+values(newId, lower(funcao), salario_base); exception WHEN unique_violation THEN raise exception 'funcao %, já havia sido inserida', funcao; end;
     end;
 
 $$ LANGUAGE 'plpgsql';
 
-
-create or replace function inserirFuncionario(
+CREATE OR REPLACE FUNCTION inserirFuncionario(
     matricula char(5),
     CPF char(11),
-    Nome varChar(50),
-	Data_nascimento date,
-	Data_admissao date,
-    cargoInserir text default null,
-    percentualBonus int default 0,
-    Supervisor char(5) default NULL,
-    crmInserir char(6) default NULL,
-    espIdInserir int default NULL
-) returns void as $$ 
+    Nome varchar(50),
+    Data_nascimento date,
+    Data_admissao date,
+    cargoInserir text DEFAULT NULL,
+    Supervisor char(5) DEFAULT NULL,
+    percentualBonus int DEFAULT 0,
+    crmInserir char(6) DEFAULT NULL,
+    espIdInserir int DEFAULT NULL
+) RETURNS void AS $$
+DECLARE
+    newIdCargo integer;
+BEGIN
+    IF percentualBonus < 0 THEN
+        RAISE EXCEPTION 'O valor não pode ser negativo.';
+    END IF;
 
-    declare 
-        newIdCargo integer;
+    IF age(Data_nascimento) < interval '18 years' THEN
+        RAISE EXCEPTION 'O funcionário é menor de idade.';
+    END IF;
 
-    Begin 
-        if percentualBonus < 0 then RAISE EXCEPTION  'O valor não pode ser negativo.'; 
-        end if;
-    
-    	IF age(Data_nascimento) < interval '18 years' THEN 
-        	RAISE EXCEPTION 'O funcionário é menor de idade.'; 
-    	END IF;
+    IF cargoInserir IS NOT NULL THEN
+        BEGIN
+            PERFORM inserirCargo(cargoInserir);
+        EXCEPTION
+            WHEN OTHERS THEN
+                NULL;
+        END;
 
-        if cargoInserir is not null then
-            
-            begin 
-                perform inserirCargo(cargoInserir);
-            exception when Others then 
-            Null;
-                
-            end;
-            select id INTO newIdCargo from CARGO where funcao= lower(cargoInserir);
-        end if;
-       
-        insert into FUNCIONARIO values (upper(matricula), CPF, upper(Supervisor), Nome, Data_nascimento, Data_admissao, newIdCargo, percentualBonus);
-        if crmInserir is not Null then 
-        	insert into MEDICO values(upper(matricula), crmInserir, espIdInserir);
-		end if;
-   	end;
+        SELECT id INTO newIdCargo FROM CARGO WHERE funcao = lower(cargoInserir);
+    END IF;
+
+    INSERT INTO FUNCIONARIO VALUES (matricula, CPF, Nome,Supervisor, Data_nascimento, Data_admissao, newIdCargo, percentualBonus);
+
+    IF crmInserir IS NOT NULL THEN
+        INSERT INTO MEDICO VALUES (matricula, crmInserir, espIdInserir);
+    END IF;
+END;
 $$ LANGUAGE 'plpgsql';
 
 

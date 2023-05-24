@@ -50,6 +50,22 @@ create or replace function inserirEspecialidadeCatalogo() returns trigger as $$
     end;
 $$ language 'plpgsql'; 
 
+f.matricula, f.CPF, f.Nome, f.Data_nascimento, f.Data_admissao, c.funcao;
+
+create or replace function InsertfuncionariosEncargados() returns trigger as $$
+    declare
+        newCargoId integer;
+        
+        begin
+            select Cargo.id into newCargoId 
+            from Cargo where lower(new.funcao) = lower(Cargo.funcao);
+
+            if newCargoId is null then  
+                insert into Cargo values(default, new.funcao) returning Cargo.id into newId;
+
+        return new;
+        end;
+    $$ language 'plpgsql';
 
 /*V--V--V--V--V--V--V--V--V--V--V--V--V--V--V--V--V--V--V--V--V--V--V--V--V--V--V*/
 /*!--!--!!--!--!!--!--!!--!--!!--!--!!--!--!!--!--!!--!--!!--!--!!--!--!!--!--!!--!--!!--!--!*/
@@ -81,3 +97,13 @@ instead of insert
 on  catalogoEspecialidade 
 for each ROW
 execute PROCEDURE inserirEspecialidadeCatalogo();
+
+
+/* catalogoEspecialidade trigger */
+
+create or replace trigger InsertfuncionariosEncargados
+instead of insert 
+on funcionariosEncargados 
+for each ROW
+execute PROCEDURE inserirfuncionariosEncargados();
+

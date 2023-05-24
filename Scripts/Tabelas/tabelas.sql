@@ -16,16 +16,18 @@ CREATE TABLE Numero_Telefone_Paciente(
     PRIMARY KEY (pacienteCPF, Numero_telefone)
 );
 
+
 CREATE TABLE FUNCIONARIO (
-    matricula char(5) Not Null PRIMARY KEY,
-    CPF char(11) Not Null UNIQUE,
+    matricula char(5) NOT NULL PRIMARY KEY,
+    CPF char(11) NOT NULL UNIQUE,
     Supervisor char(5),
-	Nome varChar(50) Not Null,
-    Data_nascimento date Not Null,
-    Data_admissao date Not Null,
-	idCargo int Not Null,
-	percentual_bonus int Not Null
+    Nome varchar(50) NOT NULL,
+    Data_nascimento date NOT NULL,
+    Data_admissao date NOT NULL,
+    idCargo int NOT NULL,
+    percentual_bonus int NOT NULL
 );
+
 
 CREATE TABLE CARGO (
 	id serial PRIMARY KEY Not Null,

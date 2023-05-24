@@ -16,12 +16,23 @@ select inserirCargo('Otorrino', 5000.00);
 select inserirCargo('Oftalmologo', 5400.00);
 
 select * from cargo;
-
+CREATE OR REPLACE FUNCTION inserirFuncionario(
+    matricula char(5),
+    CPF char(11),
+    Nome varchar(50),
+    Data_nascimento date,
+    Data_admissao date,
+    cargoInserir text DEFAULT NULL,
+    Supervisor char(5) DEFAULT NULL,
+    percentualBonus int DEFAULT 0,
+    crmInserir char(6) DEFAULT NULL,
+    espIdInserir int DEFAULT NULL
+) RETURNS void AS $$
 /*Supervisores*/
 
 select inserirFuncionario('JULME','12345678901','Julieta Capuleto','03-01-1983', '12-05-2020','Diretor');
 select inserirFuncionario('MARAS','39834594958','Maria Claudia','02-10-2000', '01-04-2019','Atendente','JULME');
-select inserirFuncionario('METIA','22345078901','Melissa Gracias', '07-11-1990', '1-12-2021','Pediatra','JULME','123456',2);
+select inserirFuncionario('METIA','22345078901','Melissa Gracias', '07-11-1990', '1-12-2021','Pediatra','JULME',0,'123456',2);
 select * from FUNCIONARIO;
 
 /*Funcionários Normais*/
@@ -34,11 +45,11 @@ select inserirFuncionario('KJDFD','37837530942','Joana Maria','02-11-1999', '1-0
 select * from FUNCIONARIO;
 
 /*Médicos*/
-select inserirFuncionario('AMFRO','94I85948593','Amós Luís', '07-12-2000', '1-12-2021','Pediatra ','METIA','128084',2);
-select inserirFuncionario('RUMCA','44355566472','Rubens Magno', '02-10-1983', '1-12-2019','Oftalmologo','METIA','125756',1);
-select inserirFuncionario('WILTN','45563565367','Wilter Venenoso', '02-09-1983', '1-09-2019','Oftalmologo','METIA','128089',1);
-select inserirFuncionario('FEJSA','13424462564','Felipe Jorge', '02-10-1980', '1-12-2020','Otorrino','METIA','549854',3);
-select inserirFuncionario('LOSJF','13424562564','Lorena Cerrana', '01-12-1989', '1-11-2020','Otorrino','METIA','129454',3);
+select inserirFuncionario('AMFRO','94I85948593','Amós Luís', '07-12-2000', '1-12-2021','Pediatra ','METIA',0,'128084',2);
+select inserirFuncionario('RUMCA','44355566472','Rubens Magno', '02-10-1983', '1-12-2019','Oftalmologo','METIA',0,'125756',1);
+select inserirFuncionario('WILTN','45563565367','Wilter Venenoso', '02-09-1983', '1-09-2019','Oftalmologo','METIA',0,'128089',1);
+select inserirFuncionario('FEJSA','13424462564','Felipe Jorge', '02-10-1980', '1-12-2020','Otorrino','METIA',0,'549854',3);
+select inserirFuncionario('LOSJF','13424562564','Lorena Cerrana', '01-12-1989', '1-11-2020','Otorrino','METIA',0,'129454',3);
 select * from MEDICO;
 select * from FUNCIONARIO;
 
