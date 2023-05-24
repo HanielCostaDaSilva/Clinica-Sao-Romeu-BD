@@ -20,8 +20,8 @@ CREATE TABLE Numero_Telefone_Paciente(
 CREATE TABLE FUNCIONARIO (
     matricula char(5) NOT NULL PRIMARY KEY,
     CPF char(11) NOT NULL UNIQUE,
-    Supervisor char(5),
     Nome varchar(50) NOT NULL,
+    Supervisor char(5),
     Data_nascimento date NOT NULL,
     Data_admissao date NOT NULL,
     idCargo int NOT NULL,

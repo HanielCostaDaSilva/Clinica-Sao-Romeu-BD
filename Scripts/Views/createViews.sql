@@ -42,8 +42,9 @@ select * from ContatoPacientes;
 
 /*View que permitirá inserção de dados.*/
 /*View que apressenta todos os funcionários que possuem, ou não, função na clínica ; */
-create or replace view funcionariosEncargados as
-select f.matricula, f.CPF, f.Nome, f.Data_nascimento, f.Data_admissao, c.funcao
-from FUNCIONARIO f left outer join CARGO on f.idCargo = c.id;
 
-select * from funcionariosEncargados;
+create or replace view funcionariosencarregados as
+select f.matricula, f.CPF, f.Nome, f.Data_nascimento, f.Data_admissao, c.funcao
+from FUNCIONARIO f left outer join CARGO c on f.idCargo = c.id;
+
+select * from funcionariosencarregados;

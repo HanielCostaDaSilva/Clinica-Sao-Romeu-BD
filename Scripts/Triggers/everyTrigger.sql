@@ -50,8 +50,6 @@ create or replace function inserirEspecialidadeCatalogo() returns trigger as $$
     end;
 $$ language 'plpgsql'; 
 
-f.matricula, f.CPF, f.Nome, f.Data_nascimento, f.Data_admissao, c.funcao;
-
 create or replace function inserirfuncionariosEncarregados() returns trigger as $$
     declare
         newCargoId integer;
@@ -61,11 +59,11 @@ create or replace function inserirfuncionariosEncarregados() returns trigger as 
             from Cargo where lower(new.funcao) = lower(Cargo.funcao);
 
             if newCargoId is null then  
-                insert into Cargo values(default, new.funcao) returning Cargo.id into newId;
+                insert into Cargo values(default, new.funcao) returning Cargo.id into newCargoId;
             end if;
             insert into funcionario 
-            values(new.matricula, new.CPF, Null, new.Nome, new.Data_nascimento,COALESCE(new.Data_admissao, current_date), newId);
-            
+            values(new.matricula, new.CPF, Null, new.Nome, new.Data_nascimento,COALESCE(new.Data_admissao, current_date), newCargoId);
+
         return new;
         end;
     $$ language 'plpgsql';
