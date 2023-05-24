@@ -33,8 +33,17 @@ select * from catalogoEspecialidade;
 
 /*View que permitirá inserção de dados.*/
 /*View que apressenta  as formas de contato para os pacientes; */
-create or replace View ContatoPacientes as
+create or replace View contatoPacientes as
 select p.cpf,p.nome, ntp.numero_telefone as "numero" 
 from paciente p inner join numero_telefone_paciente ntp on p.cpf = ntp.pacientecpf;
 
 select * from ContatoPacientes;
+
+
+/*View que permitirá inserção de dados.*/
+/*View que apressenta todos os funcionários que possuem, ou não, função na clínica ; */
+create or replace view funcionariosEncargados as
+select f.matricula, f.CPF, f.Nome, f.Data_nascimento, f.Data_admissao, c.funcao
+from FUNCIONARIO f left outer join CARGO on f.idCargo = c.id;
+
+select * from funcionariosEncargados;
