@@ -96,19 +96,23 @@ create or replace function inserirReceitaMedica(
     END;
 $$ LANGUAGE 'plpgsql';
 
-
 create or replace function inserirCargo(
 	funcao text,
 	salario_base decimal default 0.0
 ) RETURNS void  as $$
 
-Declare newId integer; begin
+Declare newId integer; 
 
-SELECT  COALESCE(MAX(id)+ 1,1) INTO newId
-FROM CARGO; IF salario_base < 0 THEN RAISE EXCEPTION 'O salário base não pode ser negativo.'; end if; begin
-INSERT INTO CARGO 
-values(newId, lower(funcao), salario_base); exception WHEN unique_violation THEN raise exception 'funcao %, já havia sido inserida', funcao; end;
-    end;
+Declare
+begin
+
+    SELECT  COALESCE(MAX(id)+ 1,1) INTO newId
+    FROM CARGO; 
+    IF salario_base < 0 THEN RAISE EXCEPTION 'O salário base não pode ser negativo.'; end if; begin
+    INSERT INTO CARGO 
+    values(newId, Trim(lower(funcao)), salario_base); exception WHEN unique_violation THEN raise exception 'funcao %, já havia sido inserida', funcao; end;
+
+end;
 
 $$ LANGUAGE 'plpgsql';
 
