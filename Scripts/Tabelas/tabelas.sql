@@ -1,7 +1,6 @@
 -- Tabelas da Base de Dados da Clínica
 CREATE TABLE PACIENTE (
     cpf char(11) NOT NULL PRIMARY KEY,
-    Func_Cadastrante char(5) Not Null, 
     Nome varChar(50) Not Null, 
     estado_urgencia int Not Null,
     Data_Nascimento  DATE Not Null,
