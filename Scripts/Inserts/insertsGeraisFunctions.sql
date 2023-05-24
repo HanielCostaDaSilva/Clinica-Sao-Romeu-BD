@@ -16,19 +16,7 @@ select inserirCargo('Otorrino', 5000.00);
 select inserirCargo('Oftalmologo', 5400.00);
 
 select * from cargo;
-CREATE OR REPLACE FUNCTION inserirFuncionario(
-    matricula char(5),
-    CPF char(11),
-    Nome varchar(50),
-    Data_nascimento date,
-    Data_admissao date,
-    cargoInserir text DEFAULT NULL,
-    Supervisor char(5) DEFAULT NULL,
-    percentualBonus int DEFAULT 0,
-    crmInserir char(6) DEFAULT NULL,
-    espIdInserir int DEFAULT NULL
-) RETURNS void AS $$
-/*Supervisores*/
+
 
 select inserirFuncionario('JULME','12345678901','Julieta Capuleto','03-01-1983', '12-05-2020','Diretor');
 select inserirFuncionario('MARAS','39834594958','Maria Claudia','02-10-2000', '01-04-2019','Atendente','JULME');
