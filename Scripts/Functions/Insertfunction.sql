@@ -41,7 +41,7 @@ create or replace function inserirRemedio(
         remedioNewId Remedio.id%type;
 
     begin
-        select id into remedioNewId from Remedio r where lower(r.descricao) like lower(nomeRemedio);
+        select id into remedioNewId from Remedio r where lower(r.nome) like lower(nomeRemedio);
 
         if remedioNewId is Null then
             select COALESCE(max(id) + 1, 1) into remedioNewId from remedio;
@@ -56,7 +56,8 @@ create or replace function inserirRemedio(
 
 create or replace function inserirPrescricao(
     receitaId PRESCRICAO.idReceita%type,
-    remedioNome text
+    remedioNome REMEDIO.nome%type,
+    descricao text
 )returns void as  $$
     
     Declare
@@ -64,33 +65,33 @@ create or replace function inserirPrescricao(
     begin
 
         remedioId := inserirRemedio(remedioNome);
-        insert into PRESCRICAO values (receitaId, remedioId);
+        insert into PRESCRICAO values (receitaId, remedioId, descricao);
 
     end; 
     $$ LANGUAGE 'plpgsql';
 
 create or replace function inserirReceitaMedica(
-    MatMedico char(5) ,
-    CPFPaciente char(13) ,
-    Descricao text ,
-    Data_Realizacao date ,
+    MatMedico char(5),
+    CPFPaciente char(13),
+    Data_Realizacao date,
     Data_Validade date,
-    remediosReceitados text[] DEFAULT '{}'
+    remediosReceitados text[] DEFAULT '{}',
+    descricao PRESCRICAO.descricao%type default 'nenhuma descricao'
 ) returns void as $$
     
     Declare
         receitaId integer;
-		 v_remedio TEXT;    
+		 v_remedio TEXT;  
     Begin
 
         select COALESCE(max(id) +1, 1) into receitaId from Receita;
 
-        INSERT INTO Receita  VALUES (receitaId, MatMedico, CPFPaciente, Descricao, Data_Realizacao,Data_Validade);
+        INSERT INTO Receita  VALUES (receitaId, MatMedico, CPFPaciente,Data_Realizacao,Data_Validade);
 
         if array_length(remediosReceitados,1) > 0 then 
             
             FOREACH v_remedio IN ARRAY remediosReceitados LOOP
-                PERFORM inserirPrescricao(receitaId, v_remedio);
+                PERFORM inserirPrescricao(receitaId, v_remedio, descricao);
             END LOOP;
         End If;
     END;
@@ -147,10 +148,10 @@ BEGIN
                 NULL;
         END;
 
-        SELECT id INTO newIdCargo FROM CARGO WHERE funcao = lower(cargoInserir);
+        SELECT id INTO newIdCargo FROM CARGO WHERE funcao = Trim(lower(cargoInserir));
     END IF;
 
-    INSERT INTO FUNCIONARIO VALUES (matricula, CPF, Nome,Supervisor, Data_nascimento, Data_admissao, newIdCargo, percentualBonus);
+    INSERT INTO FUNCIONARIO VALUES (matricula, CPF, Nome, Supervisor, Data_nascimento, Data_admissao, newIdCargo, percentualBonus);
 
     IF crmInserir IS NOT NULL THEN
         INSERT INTO MEDICO VALUES (matricula, crmInserir, espIdInserir);

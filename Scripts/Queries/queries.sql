@@ -4,10 +4,12 @@
 e com receituário nos últimos 3 meses. Sendo assim, faça uma consulta para estes casos. 
 (Uso de operador básico)
 */
-select p.nome as nome_paciente, r.descricao, r.data_realizacao
+select p.nome as nome_paciente, pre.descricao, r.data_realizacao
 from paciente p 
 	inner join receita r
 	on p.cpf = r.cpfpaciente
+	inner join prescricao pre
+	on pre.idReceita = r.id
 where p.estado_urgencia >= 4 
 	and r.data_realizacao >= current_date - interval '3 months';
 
