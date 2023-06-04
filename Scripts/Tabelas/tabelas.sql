@@ -107,7 +107,7 @@ ALTER TABLE PRESCRICAO ADD CONSTRAINT FK_PRESCRICAO2
 -- Checks
 ALTER TABLE PACIENTE ADD CONSTRAINT checkEstadoUrgencia  check (estado_urgencia between 1 and 5);
 
-ALTER TABLE PACIENTE ADD CONSTRAINT checkDataNascimento check (data_nascimento <= current_date)
+ALTER TABLE PACIENTE ADD CONSTRAINT checkDataNascimento check (data_nascimento <= current_date);
 
 ALTER TABLE PACIENTE ADD CONSTRAINT checkCPF check (cpf ~ '^[0-9]{11}$');
 

@@ -38,4 +38,11 @@ select
 from funcionario f
 	inner join medico m on f.matricula = m.matricula
 	inner join cargo c on f.idcargo = c.id
-where salario_base + percentual_bonus < 5000.00
+where salario_base + percentual_bonus < 5000.00;
+
+
+
+select funcao,avg(salario_base) from funcionario 
+inner join medico on funcionario.matricula = medico.matricula
+inner join cargo on funcionario.idcargo = cargo.id
+group by cargo.funcao;

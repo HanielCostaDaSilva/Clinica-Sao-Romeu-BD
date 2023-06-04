@@ -32,7 +32,7 @@ select inserirFuncionario('KJDFD','37837530942','Joana Maria','02-11-1999', '1-0
 select * from FUNCIONARIO;
 
 /*Médicos*/
-select inserirFuncionario('AMFRO','94I85948593','Amós Luís', '07-12-2000', '1-12-2021','Pediatra','METIA',0,'128084',2);
+select inserirFuncionario('AMFRO','94859485934','Amós Luís', '07-12-2000', '1-12-2021','Pediatra','METIA',0,'128084',2);
 select inserirFuncionario('RUMCA','44355566472','Rubens Magno', '02-10-1983', '1-12-2019','Oftalmologo','METIA',0,'125756',1);
 select inserirFuncionario('WILTN','45563565367','Wilter Venenoso', '02-09-1983', '1-09-2019','Oftalmologo','METIA',0,'128089',1);
 select inserirFuncionario('FEJSA','13424462564','Felipe Jorge', '02-10-1980', '1-12-2020','Otorrino','METIA',0,'549854',3);
@@ -66,7 +66,7 @@ select inserirReceitaMedica('METIA', '98521676000', '2023-04-30', '2023-05-30', 
 select inserirReceitaMedica('LOSJF', '82691692345', '2023-04-30', '2023-05-30', '{"Tríplice viral"}', 'Vacina contra rubéola');
 select inserirReceitaMedica('AMFRO', '73536904461', '2023-05-01', '2023-06-01', '{"Clorfeniramina"}', 'Medicação para alergia');
 select inserirReceitaMedica('FEJSA', '24874727359', '2023-04-30', '2023-05-15', '{"Dramin", "Betahistina"}', 'Tratamento para labirintite');
-select inserirReceitaMedica('METIA', '00593248718', '2024-04-30', '2023-06-15', '{"Diane 35", "Dipirona"}', 'Anticoncepcional oral');
+select inserirReceitaMedica('METIA', '00593248718', '2023-04-30', '2023-06-15', '{"Diane 35", "Dipirona"}', 'Anticoncepcional oral');
 
 select * from receita;
 select * from remedio;
