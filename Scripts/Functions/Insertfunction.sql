@@ -106,7 +106,6 @@ Declare newId integer;
 
 Declare
 begin
-
     SELECT  COALESCE(MAX(id)+ 1,1) INTO newId
     FROM CARGO; 
     IF salario_base < 0 THEN RAISE EXCEPTION 'O salário base não pode ser negativo.'; end if; begin

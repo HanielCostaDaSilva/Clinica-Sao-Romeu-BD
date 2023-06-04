@@ -35,6 +35,81 @@ begin
     return new;
 	end;
 $$ language 'plpgsql';
+
+create or replace function LimiteUpdateSalario()
+RETURNS TRIGGER AS $$
+DECLARE
+    limiteSalarioSuperior decimal;
+    limiteSalarioInferior decimal;
+    porcentagemLim decimal;
+BEGIN
+    porcentagemLim := 0.45;
+
+    if (new.salario_base > old.salario_base) THEN
+        limiteSalarioSuperior := (old.salario_base * (1 + porcentagemLim));
+        if (new.salario_base not between old.salario_base and limiteSalarioSuperior ) THEN
+            raise EXCEPTION 'O novo salário extrapolou o limite superior de % por cento', (porcentagemLim * 100)
+                USING HINT = 'Insira um novo salário menor que: R$ ' || limiteSalarioSuperior,
+                      ERRCODE = '70001';
+        end if;
+
+        raise notice 'O salário base da função % sofreu um aumento.', new.funcao;
+        raise notice 'Salário anterior =====> %', old.salario_base;
+        raise notice 'Salário Novo =====> %', new.salario_base;
+        raise notice 'Aumento de =====>  R$ %', new.salario_base - old.salario_base;
+        raise notice '';
+
+    ELSIF (new.salario_base < old.salario_base) THEN
+        
+        limiteSalarioInferior :=  old.salario_base - (old.salario_base * porcentagemLim); 
+
+        IF (new.salario_base not between limiteSalarioInferior and old.salario_base ) THEN
+            raise EXCEPTION 'O novo salário extrapolou o limite inferior de % por cento.', (porcentagemLim * 100)
+                USING HINT = 'Insira um novo salário maior que: R$ ' || limiteSalarioInferior,
+                      ERRCODE = '70002';
+        END IF;
+
+        raise notice 'O salário base da função % sofreu um decréscimo.', new.funcao;
+        raise notice 'Salário anterior =====> %', old.salario_base;
+        raise notice 'Salário Novo =====> %', new.salario_base;
+        raise notice 'Decréscimo de =====>  R$ %', old.salario_base - new.salario_base;
+        raise notice '';
+    END IF;
+
+    RETURN new;
+END;
+$$ LANGUAGE 'plpgsql';
+
+create or replace function InsertNewCargo()
+returns trigger as $$
+
+declare
+    idCargoExistente integer;
+    novoID integer;
+begin
+    new.funcao := lower(new.funcao);
+    
+    select distinct id into idCargoExistente from cargo 
+    where lower(funcao)= new.funcao;
+    
+    if idCargoExistente is null then
+        --Referente a inserção
+        select max(coalesce(cargo.id, 0)) + 1 into novoID from cargo;
+        new.id := novoID;
+        new.salario_base := new.salario_base; 
+        
+        raise notice ' A função % foi inserida com o salário base: R$ %', new.funcao, new.salario_base;
+    else
+        --Referente a atualização
+        update Cargo set salario_base = new.salario_base where Cargo.id = idCargoExistente;
+        raise notice ' o salario base da função % foi atualizado para: R$ %', new.funcao, new.salario_base;
+
+    end if;
+
+    return new;
+end;
+$$ language 'plpgsql';
+
 /*F--F--F--F--F--F--F--F--F--F--F--F--F--F--F--F--F--F--F--F--F--F--F--F--F--F--F*/
 /*Views Triggers functions*/
 /*V--V--V--V--V--V--V--V--V--V--V--V--V--V--V--V--V--V--V--V--V--V--V--V--V--V--V*/
@@ -88,6 +163,21 @@ before insert
 on  Especialidade 
 for each ROW
 execute PROCEDURE inserirNovaEspecialidade();
+
+
+/*Cargo*/
+create trigger UpdateCargo 
+before Update 
+on  Cargo 
+for each ROW
+execute PROCEDURE LimiteUpdateSalario();
+
+
+create trigger InsertCargo 
+before insert 
+on  Cargo 
+for each ROW
+execute PROCEDURE InsertNewCargo();
 
 /*View Triggers*/
 
