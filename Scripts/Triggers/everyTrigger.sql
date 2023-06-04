@@ -121,20 +121,20 @@ begin
     --Checa se é um Update funcionário que está sendo adicionado
     if TG_OP ='UPDATE' then
 
-    --Não houve alteração no supervisor.
+    -- houve alteração no supervisor.
         if new.supervisor <> old.supervisor then 
 
             -- Houve apenas  a troca entre supervisores 
-        if not exists (select 1 from unnest(supervisores) where unnest = new.supervisor) then
+            if new.supervisor <> all(supervisores) then
                 update Funcionario
                     SET percentual_bonus = percentual_bonus + bonusSupervisor
                     WHERE matricula = new.supervisor;
         
+            end if;
             --No final, o antigo supervisor perderá o bônus
             update Funcionario
                 set percentual_bonus= greatest(percentual_bonus - bonusSupervisor, 0)
                 where matricula= old.supervisor;
-            end if;
         end if;
     -- Caso seja um novo funcionário 
     elsif TG_OP='INSERT' then 
@@ -149,7 +149,6 @@ begin
     return new;
 end;
 $$ language 'plpgsql';
-
 
 
 /*F--F--F--F--F--F--F--F--F--F--F--F--F--F--F--F--F--F--F--F--F--F--F--F--F--F--F*/

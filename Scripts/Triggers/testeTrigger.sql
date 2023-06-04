@@ -23,5 +23,5 @@ select * from funcionario;
 
  select * from funcionario;
 
- insert into Funcionario values('ROQEU','38754874570','Robinhos Graus','JOIEC','10/02/2004',current_date,4 0.0);
+  insert into Funcionario values('ROQEU','38754874570','Robinhos Graus','JOIEC','10/02/2004',current_date,4, 0.0);
  select * from funcionario;
