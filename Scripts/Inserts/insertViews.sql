@@ -1,4 +1,4 @@
-/*!!! Para realizar esses inserts, é necessário estar funcionando os triggers relacionados as views!!!*/
+/*!!! You need active all triggers!!!*/
 
 insert into catalogoespecialidade values('Ortopedista','R$ 159.34');
 insert into catalogoespecialidade values('Demartologia','R$ 302.40');

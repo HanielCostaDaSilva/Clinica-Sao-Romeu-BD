@@ -41,8 +41,20 @@ from funcionario f
 where salario_base + percentual_bonus < 5000.00;
 
 
+/*Query responsavel por apressentar apenas o salário dos médicos na clínica . */
 
-select funcao,avg(salario_base) from funcionario 
+select distinct funcao as "Especialidade", salario_base as "Salario" from funcionario 
 inner join medico on funcionario.matricula = medico.matricula
 inner join cargo on funcionario.idcargo = cargo.id
-group by cargo.funcao;
+
+
+
+
+/*Query responsavel por apressentar todos os supervisores da clínica. */
+
+select  matricula 
+from funcionario f
+where f.matricula in (
+	select distinct supervisor
+	from funcionario
+);

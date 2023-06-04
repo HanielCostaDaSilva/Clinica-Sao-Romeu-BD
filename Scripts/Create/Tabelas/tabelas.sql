@@ -24,7 +24,7 @@ CREATE TABLE FUNCIONARIO (
     Data_nascimento date NOT NULL,
     Data_admissao date NOT NULL,
     idCargo int NOT NULL,
-    percentual_bonus int NOT NULL
+    percentual_bonus int NOT NULL default 0.0
 );
 
 
