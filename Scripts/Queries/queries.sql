@@ -40,18 +40,93 @@ from funcionario f
 	inner join cargo c on f.idcargo = c.id
 where salario_base + percentual_bonus < 5000.00;
 
+/*
+4- A clínica está fazendo uma promoção especial para pacientes maiores de 60 anos. Ela quer saber quem
+são os sortudos e também seus números de telefone. Por isso, faça uma consulta. (Uso de INNER JOIN)
+*/
+select p.Nome, p.Data_Nascimento, coalesce(t.Numero_telefone,'Sem número') as Numero_Telefone
+from PACIENTE p
+join Numero_Telefone_Paciente t on p.cpf = t.pacienteCPF
+where p.Data_Nascimento <= (current_date - INTERVAL '60 years');
+
+/*
+5- Obtenha o nome dos pacientes, a data da prescrição e o nome do medicamento para todas as
+prescrições registradas na clínica, incluindo os pacientes que não possuem prescrições.
+Certifique-se de listar todos os medicamentos, mesmo que não estejam associados a uma prescrição.
+(Uso de Left e Right Outer Join)
+*/
+select
+    p.Nome as nome_paciente,
+    rec.Data_Realizacao as data_prescricao,
+    rem.nome as nome_medicamento
+from
+    PACIENTE p
+    left join RECEITA rec on p.cpf = rec.CPFPaciente
+    left join PRESCRICAO pres on rec.id = pres.idReceita
+    right join REMEDIO rem on pres.idRemedio = rem.id;
+
+/*
+6- Obtenha o número de prescrições realizadas por cada médico na clínica,
+listando o nome do médico e a contagem de prescrições. Apenas inclua os médicos
+que tenham realizado 2 ou mais prescrições. (Uso de agrupamento)
+*/
+select f.nome as nome_medico, count(*) as total_prescricoes
+from funcionario f
+	join medico m on f.matricula = m.matricula
+	join receita r ON m.matricula = r.matmedico
+group by f.nome
+having count(*) >= 2;
+
+/*
+7- Obtenha a média de salário por cargo na clínica, listando o nome do cargo
+e a média salarial. Apenas inclua os cargos que tenham mais de duas pessoas.
+*/
+select c.funcao as cargo, ROUND(AVG(c.salario_base), 2) as media_salarial
+from cargo c
+	join funcionario f ON c.id = f.idcargo
+group by c.funcao
+having count(f.matricula) > 1;
+
+/*
+8- Liste os médicos que também são pacientes. (Uso de uma operação com conjuntos)
+*/
+select nome
+from funcionario f
+	join medico m on f.matricula = m.matricula
+intersect
+select p.nome
+from paciente p;
+
+/*
+9-  Selecionar os médicos que possuem o maior número de pacientes atendidos, e suas
+respectivas matrículas. (Uso de subqueries)
+*/
+select f.nome, m.matricula
+from medico m
+	join funcionario f on m.matricula = f.matricula
+where (select count(*) from receita r where r.matmedico = m.matricula) = 
+    (select max(num_pacientes) from
+        (select count(*) AS num_pacientes from receita group by matmedico) as t);
+
+/*
+10- Consulte os remédios prescritos mais de uma vez, independete do médico
+que receitou. (Uso de subquerie)
+*/
+select r.nome
+from remedio r
+where r.id in (
+    select pr.idRemedio
+    from prescricao pr
+    group by pr.idRemedio
+    having count(pr.idRemedio) > 1
+);
 
 /*Query responsavel por apressentar apenas o salário dos médicos na clínica . */
 
 select distinct funcao as "Especialidade", salario_base as "Salario" from funcionario 
 inner join medico on funcionario.matricula = medico.matricula
 inner join cargo on funcionario.idcargo = cargo.id
-
-
-
-
 /*Query responsavel por apressentar todos os supervisores da clínica. */
-
 select  matricula 
 from funcionario f
 where f.matricula in (

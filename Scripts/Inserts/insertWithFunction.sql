@@ -52,6 +52,8 @@ select inserirPaciente('73536904461', 'Bruna Bastos', 4, '2000-02-20', 'Rua das 
 select inserirPaciente('24874727359', 'Carlos Cunha', 1, '1985-05-05', 'Av. Paulista', 'Bela Vista', 'Pilar', ARRAY['83933334444', '83955556666']);
 select inserirPaciente('00593248718', 'Daniela Duarte', 2, '1972-10-22', 'Rua do Comércio', 'Centro', 'São Miguel de Taipu', ARRAY['83977778888']);
 select inserirpaciente('59485598603','Lucas Alvares',5,'03-11-2004','Marieta Araujo','Ernani Satiro','João Pessoa');
+select inserirPaciente('93084818410','João do Ovão',5,'11-11-1962','Honório Neto','Bosque Velho','Pilar',ARRAY['83923893490']);
+select inserirPaciente('13424462564','Felipe Jorge',1,'02-10-1980','Rua Vitorino','Bessa','João Pessoa',ARRAY['83919287093']);
 
 select * from PACIENTE;
 select * from Numero_Telefone_Paciente;
@@ -67,6 +69,8 @@ select inserirReceitaMedica('LOSJF', '82691692345', '2023-04-30', '2023-05-30', 
 select inserirReceitaMedica('AMFRO', '73536904461', '2023-05-01', '2023-06-01', '{"Clorfeniramina"}', 'Medicação para alergia');
 select inserirReceitaMedica('FEJSA', '24874727359', '2023-04-30', '2023-05-15', '{"Dramin", "Betahistina"}', 'Tratamento para labirintite');
 select inserirReceitaMedica('METIA', '00593248718', '2023-04-30', '2023-06-15', '{"Diane 35", "Dipirona"}', 'Anticoncepcional oral');
+select inserirReceitaMedica('LOSJF', '93084818410', '2023-06-04', '2023-07-15', '{"Prednisona"}', 'Corticosteroide anti-inflamatório e imunossupressor');
 
 select * from receita;
+select * from prescricao;
 select * from remedio;

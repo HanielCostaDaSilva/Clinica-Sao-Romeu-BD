@@ -15,7 +15,6 @@ CREATE TABLE Numero_Telefone_Paciente(
     PRIMARY KEY (pacienteCPF, Numero_telefone)
 );
 
-
 CREATE TABLE FUNCIONARIO (
     matricula char(5) NOT NULL PRIMARY KEY,
     CPF char(11) NOT NULL UNIQUE,
@@ -109,15 +108,15 @@ ALTER TABLE PACIENTE ADD CONSTRAINT checkEstadoUrgencia  check (estado_urgencia 
 
 ALTER TABLE PACIENTE ADD CONSTRAINT checkDataNascimento check (data_nascimento <= current_date);
 
-ALTER TABLE PACIENTE ADD CONSTRAINT checkCPF check (cpf ~ '^[0-9]{11}$');
+ALTER TABLE PACIENTE ADD CONSTRAINT checkCPF check (cpf ~ '^[0-9]$');
 
-ALTER TABLE Numero_Telefone_Paciente ADD CONSTRAINT checkNumeroTelefone check (Numero_telefone ~ '^[0-9]{11}$');
+ALTER TABLE Numero_Telefone_Paciente ADD CONSTRAINT checkNumeroTelefone check (Numero_telefone ~ '^[0-9]$');
 
-ALTER TABLE FUNCIONARIO ADD CONSTRAINT checkCPFFuncionario check (CPF ~ '^[0-9]{11}$');
+ALTER TABLE FUNCIONARIO ADD CONSTRAINT checkCPFFuncionario check (CPF ~ '^[0-9]$');
 
 ALTER TABLE FUNCIONARIO ADD CONSTRAINT checkData_admissao check (Data_admissao <= current_date);
 
-ALTER TABLE FUNCIONARIO ADD CONSTRAINT checkMatricula check (matricula ~ '^[A-Z]{5}$');
+ALTER TABLE FUNCIONARIO ADD CONSTRAINT checkMatricula check (matricula ~ '^[A-Z]$');
 
 ALTER TABLE CARGO ADD CONSTRAINT checkSalarioBase check (salario_base > 0.0);
 
@@ -127,7 +126,7 @@ ALTER TABLE RECEITA ADD CONSTRAINT checkDataValidade check (Data_Validade < curr
 
 ALTER TABLE RECEITA ADD CONSTRAINT checkData_Realizacao check (Data_Realizacao <= current_date);
 
-ALTER TABLE REMEDIO ADD CONSTRAINT checkDescricao check (length(nome) <= 255);
+ALTER TABLE REMEDIO ADD CONSTRAINT checkDescricao check (length(nome) <= 100);
 
 ALTER TABLE PRESCRICAO ADD CONSTRAINT checkIdReceita check (idReceita > 0);
 
