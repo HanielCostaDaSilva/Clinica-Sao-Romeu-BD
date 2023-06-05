@@ -81,7 +81,7 @@ having count(*) >= 2;
 7- Obtenha a média de salário por cargo na clínica, listando o nome do cargo
 e a média salarial. Apenas inclua os cargos que tenham mais de duas pessoas.
 */
-select c.funcao as cargo, ROUND(AVG(c.salario_base), 2) as media_salarial
+select c.funcao as cargo, round(avg(c.salario_base), 2) as media_salarial
 from cargo c
 	join funcionario f ON c.id = f.idcargo
 group by c.funcao
@@ -109,7 +109,7 @@ where (select count(*) from receita r where r.matmedico = m.matricula) =
         (select count(*) AS num_pacientes from receita group by matmedico) as t);
 
 /*
-10- Consulte os remédios prescritos mais de uma vez, independete do médico
+10- Consulte os remédios prescritos mais de uma vez, independente do médico
 que receitou. (Uso de subquerie)
 */
 select r.nome
@@ -119,17 +119,4 @@ where r.id in (
     from prescricao pr
     group by pr.idRemedio
     having count(pr.idRemedio) > 1
-);
-
-/*Query responsavel por apressentar apenas o salário dos médicos na clínica . */
-
-select distinct funcao as "Especialidade", salario_base as "Salario" from funcionario 
-inner join medico on funcionario.matricula = medico.matricula
-inner join cargo on funcionario.idcargo = cargo.id
-/*Query responsavel por apressentar todos os supervisores da clínica. */
-select  matricula 
-from funcionario f
-where f.matricula in (
-	select distinct supervisor
-	from funcionario
 );

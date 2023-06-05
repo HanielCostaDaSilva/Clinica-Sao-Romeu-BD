@@ -17,6 +17,7 @@ select inserirCargo('Oftalmologo', 5400.00);
 
 select * from cargo;
 
+/*Supervisores*/
 select inserirFuncionario('JULME','12345678901','Julieta Capuleto','03-01-1983', '12-05-2020','Diretor');
 select inserirFuncionario('MARAS','39834594958','Maria Claudia','02-10-2000', '01-04-2019','Atendente','JULME');
 select inserirFuncionario('METIA','22345078901','Melissa Gracias', '07-11-1990', '1-12-2021','Pediatra','JULME',0,'123456',2);
@@ -41,7 +42,7 @@ select * from MEDICO;
 select * from FUNCIONARIO;
 
 /*Pacientes*/
-select inserirPaciente('82691696191', 'Allan Alves Amancio', 1, '04-11-2004', 'Rua Chá de Camomila', 'Centro', 'São Miguel de Taipu', ARRAY['83982292523', '83986751649']);
+select inserirPaciente('82691696191', 'Allan Amancio', 1, '04-11-2004', 'Rua Chá de Camomila', 'Centro', 'São Miguel de Taipu', ARRAY['83982292523', '83986751649']);
 select inserirPaciente('81763444962', 'João Silva', 2, '1990-05-15', 'Rua 2 de Novembro', 'Centro', 'São Miguel de Taipu', ARRAY['83912345678', '83987654321']);
 select inserirPaciente('30729081210', 'Maria Souza', 1, '1985-09-20', 'Rua Laranja', 'Café do Vento', 'Sobrado', ARRAY['83911111111', '83922222222']);
 select inserirPaciente('17583999459', 'Pedro Santos', 3, '2000-03-10', 'Rua Batista', 'Centro', 'São Miguel de Taipu', ARRAY['83933333333']);
@@ -59,7 +60,7 @@ select * from PACIENTE;
 select * from Numero_Telefone_Paciente;
 
 /*Receitas Médicas*/
-select inserirReceitaMedica('RUMCA', '82691696191', '2023-04-30', '2023-05-30', '{"Dipirona","Lentes para miopia","lacribel"}', 'Dificuldades para enxergar de perto e dores de cabeça.');
+select inserirReceitaMedica('RUMCA', '82691696191', '2023-04-30', '2023-05-30', '{"Dipirona","Lentes para miopia","Lacribell"}', 'Dificuldades para enxergar de perto e dores de cabeça.');
 select inserirReceitaMedica('WILTN', '81763444962', '2023-04-30', '2023-05-30', '{"Proteção contra luz azul"}', 'Dores de cabeça ao se expor a luz solar');
 select inserirReceitaMedica('AMFRO', '30729081210', '2023-04-30', '2023-05-30', '{"Dextrometorfano", "Guaifenesina"}', 'Dores no peito, dificuldade para respirar.');
 select inserirReceitaMedica('FEJSA', '17583999459', '2023-04-30', '2023-05-30', '{"Amoxicilina", "Clavulanato de potássio"}', 'Dificuldade para respirar.');

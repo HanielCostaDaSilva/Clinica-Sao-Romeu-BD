@@ -14,7 +14,7 @@ group by  bairro,cidade;
 
 select * from pacientePorEndereco;
 
-/*View que apressenta a quantidade de consultas e o valor monetário arrecado para cada especialidade na clínica.*/
+/*View que apresenta a quantidade de consultas e o valor monetário arrecado para cada especialidade na clínica.*/
 create or replace View arrecadadoPorEspecialidade as 
 select e.descricao as "Especialidade",count(e.id) as "total_Consulta", to_char( Sum(e.preco_consulta), 'R$999,999,999.99') as "total_Arrecadado"
 from receita r 
@@ -22,6 +22,43 @@ from receita r
 	inner join especialidade e on m.espid = e.id
 group by e.descricao;
 
+/* View que projeta os remédios receitados, e quem recebeu pela
+primeira vez o medicamento*/
+create or replace view RemediosReceitados as
+select rem.nome as remedio, 
+	f.nome AS medico, 
+	e.descricao AS especialidade, 
+	p.nome AS primeiro_paciente,
+	rec.data_realizacao
+from paciente p 
+	join receita rec on p.cpf = rec.cpfpaciente
+	join medico m on rec.MatMedico = m.Matricula
+	join especialidade e on e.id = m.espid
+	join funcionario f on m.matricula = f.matricula
+	join prescricao prec on prec.idReceita = rec.id
+	join remedio rem on rem.id = prec.idRemedio
+where prec.idReceita = (
+    select min(idReceita)
+    from prescricao
+    where idRemedio = prec.idRemedio
+);
+
+--drop view remediosReceitados;
+select * from RemediosReceitados;
+
+create or replace view SupervisoresClinica as
+select f.matricula,
+       f.nome,
+       (select count(*) FROM funcionario where supervisor = f.matricula) as total_subordinados,
+       case when me.espid is not null then 'Sim' else 'Não' end as e_medico
+from medico me
+right join funcionario f on f.matricula = me.matricula
+left join funcionario m on f.matricula = m.supervisor
+where f.matricula in (select distinct supervisor from funcionario)
+group by f.matricula, f.nome, e_medico;
+
+-- drop view SupervisoresClinica;
+select * from SupervisoresClinica;
 
 /*View que permitirá inserção de dados.*/
 /*View que apressenta um catálogo a respeito das especialidades oferecidas e seus respectivos preços*/
@@ -38,7 +75,6 @@ select p.cpf,p.nome, ntp.numero_telefone as "numero"
 from paciente p inner join numero_telefone_paciente ntp on p.cpf = ntp.pacientecpf;
 
 select * from ContatoPacientes;
-
 
 /*View que permitirá inserção de dados.*/
 /*View que apressenta todos os funcionários que possuem, ou não, função na clínica ; */

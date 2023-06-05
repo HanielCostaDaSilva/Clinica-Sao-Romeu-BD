@@ -231,7 +231,7 @@ execute PROCEDURE InsertNewCargo();
 
 create trigger insertNewEspecialidadeOnCatalago 
 instead of insert 
-on  catalogoEspecialidade 
+on catalogoEspecialidade 
 for each ROW
 execute PROCEDURE inserirEspecialidadeCatalogo();
 

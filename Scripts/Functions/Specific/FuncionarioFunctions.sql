@@ -1,46 +1,31 @@
 -- Outras funções utilitárias
 
 -- Função que atualiza o salário de um funcionário específico
-create or replace function atualizarSalario(
-  codigoFuncionario char(5),
-  novoSalario numeric
+create or replace function atualizarSalarioBase(
+  idCargo cargo.id%type,
+  aumentoSalarial cargo.salario_base%type
 ) returns void as $$
 begin
-  update funcionario
-  set salario = novosalario
-  where matricula = codigofuncionario;
+  update cargo
+  set salario_base = salario_base * (1 + (aumentoSalarial / 100)::numeric)
+  where id = idCargo;
   if not found then
-    raise notice 'Funcionário com código % não encontrado.', codigofuncionario;
+    raise notice 'Cargo com código % não encontrado.', idCargo;
   end if;
 end;
 $$ language plpgsql;
 
+select * from cargo order by id;
 select * from funcionario;
 
 -- Função que atualiza o salário de todos os funcionários a partir de um valor percentual
 create or replace function atualizarTodosSalarios(percentual numeric) 
 returns void as $$
 begin
-  update funcionario
-  set salario = salario * (1 + percentual/100);
+  update cargo
+  set salario_base = salario_base * (1 + percentual/100)::numeric;
 end;
 $$ language 'plpgsql';
 
-select * from funcionario;
-
--- Função que atualiza os salários a partir do cargo de ocupação, em valor percentual
-create or replace function atualizarSalariosPorCargo(
-	cargo varchar(15),
-	percentual numeric
-) returns void as $$
-begin
-	update funcionario
-	set salario = salario * (1+ percentual/100)
-	where funcao = cargo;
-	if not found then
-		raise notice 'Cargo (%) não encontrado', cargo;
-	end if;
-end;
-$$ language 'plpgsql';
-
+select * from cargo;
 select * from funcionario;
