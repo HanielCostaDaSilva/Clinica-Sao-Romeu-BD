@@ -27,24 +27,22 @@ from paciente p
 		join especialidade e on m.espid = e.id
 		join prescricao pres on rec.id = pres.idReceita
 		join remedio r on pres.idRemedio = r.id
-where abs(extract(year from (data_realizacao))) = 2023;
+where extract(year from data_realizacao) = 2023;
 
 /*
-3- Consulte os funcionários que possuem um salário abaixo dos 5000 reais, para que sejam bonificados
+3- Consulte os funcionários que possuem um salário abaixo dos 4000 reais, para que sejam bonificados
 pela direção geral.
 */
-select * from funcionario;
-select
+select f.nome, c.salario_base, f.percentual_bonus
 from funcionario f
-	inner join medico m on f.matricula = m.matricula
 	inner join cargo c on f.idcargo = c.id
-where salario_base + percentual_bonus < 5000.00;
+where salario_base + percentual_bonus < 4000.00;
 
 /*
 4- A clínica está fazendo uma promoção especial para pacientes maiores de 60 anos. Ela quer saber quem
 são os sortudos e também seus números de telefone. Por isso, faça uma consulta. (Uso de INNER JOIN)
 */
-select p.Nome, p.Data_Nascimento, coalesce(t.Numero_telefone,'Sem número') as Numero_Telefone
+select p.Nome, p.Data_Nascimento, t.numero_telefone
 from PACIENTE p
 join Numero_Telefone_Paciente t on p.cpf = t.pacienteCPF
 where p.Data_Nascimento <= (current_date - INTERVAL '60 years');
@@ -120,3 +118,24 @@ where r.id in (
     group by pr.idRemedio
     having count(pr.idRemedio) > 1
 );
+
+/*Consultas que foram melhoradas*/
+-- Consulta 3
+select f.nome, c.salario_base, f.percentual_bonus
+from funcionario f
+left join cargo c ON f.idCargo = c.id
+where c.salario_base + f.percentual_bonus < 4000.00;
+
+/* Justificativa: a consulta foi reescrita para utilizar a junção LEFT JOIN e selecionar
+todos os funcionários, inclusive quem não possui cargo ainda, e outros campos
+relevantes. Dessa forma, quem não possui cargo deverá receber um cargo posteriormente. */
+
+-- Consulta 4
+select p.Nome, p.Data_Nascimento, t.numero_telefone
+from PACIENTE p
+left join Numero_Telefone_Paciente t on p.cpf = t.pacienteCPF
+where p.Data_Nascimento <= current_date - INTERVAL '60 years';
+
+/* Justificativa: a consulta foi reescrita com LEFT JOIN para incluir todos os pacientes,
+mesmo aqueles que não possuem número de telefone cadastrado. Isso permite
+obter pacientes e seus números de telefone, caso existam. */
