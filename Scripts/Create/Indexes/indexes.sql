@@ -9,6 +9,6 @@ da consulta médica */
 create index idx_consultas_realizadas
 on receita (data_realizacao);
 
-/* Índice no estado de emergência do paciente*/
+/* Índice no estado de emergência do paciente */
 create index idx_estado_paciente
 on paciente (estado_urgencia);

@@ -26,7 +26,6 @@ CREATE TABLE FUNCIONARIO (
     percentual_bonus int NOT NULL default 0.0
 );
 
-
 CREATE TABLE CARGO (
 	id serial PRIMARY KEY Not Null,
 	funcao varchar(45) UNIQUE Not Null,
@@ -108,15 +107,15 @@ ALTER TABLE PACIENTE ADD CONSTRAINT checkEstadoUrgencia  check (estado_urgencia 
 
 ALTER TABLE PACIENTE ADD CONSTRAINT checkDataNascimento check (data_nascimento <= current_date);
 
-ALTER TABLE PACIENTE ADD CONSTRAINT checkCPF check (cpf ~ '^[0-9]$');
+ALTER TABLE PACIENTE ADD CONSTRAINT checkCPF check (cpf ~ '^[0-9]{11}$');
 
-ALTER TABLE Numero_Telefone_Paciente ADD CONSTRAINT checkNumeroTelefone check (Numero_telefone ~ '^[0-9]$');
+ALTER TABLE Numero_Telefone_Paciente ADD CONSTRAINT checkNumeroTelefone check (Numero_telefone ~ '^[0-9]{11}$');
 
-ALTER TABLE FUNCIONARIO ADD CONSTRAINT checkCPFFuncionario check (CPF ~ '^[0-9]$');
+ALTER TABLE FUNCIONARIO ADD CONSTRAINT checkCPFFuncionario check (CPF ~ '^[0-9]{11}$');
 
 ALTER TABLE FUNCIONARIO ADD CONSTRAINT checkData_admissao check (Data_admissao <= current_date);
 
-ALTER TABLE FUNCIONARIO ADD CONSTRAINT checkMatricula check (matricula ~ '^[A-Z]$');
+ALTER TABLE FUNCIONARIO ADD CONSTRAINT checkMatricula check (matricula ~ '^[A-Z]{5}$');
 
 ALTER TABLE CARGO ADD CONSTRAINT checkSalarioBase check (salario_base > 0.0);
 

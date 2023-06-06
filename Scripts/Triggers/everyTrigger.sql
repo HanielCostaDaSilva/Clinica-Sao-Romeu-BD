@@ -178,7 +178,7 @@ create or replace function inserirfuncionariosEncarregados() returns trigger as 
                 insert into Cargo values(default, new.funcao) returning Cargo.id into newCargoId;
             end if;
             insert into funcionario 
-            values(new.matricula, new.CPF, Null, new.Nome, new.Data_nascimento,COALESCE(new.Data_admissao, current_date), newCargoId);
+            values(new.matricula, new.CPF, new.Nome, null,new.Data_nascimento,COALESCE(new.Data_admissao, current_date), newCargoId);
 
         return new;
         end;

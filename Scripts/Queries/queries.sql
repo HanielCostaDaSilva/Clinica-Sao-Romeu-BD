@@ -78,6 +78,7 @@ having count(*) >= 2;
 /*
 7- Obtenha a média de salário por cargo na clínica, listando o nome do cargo
 e a média salarial. Apenas inclua os cargos que tenham mais de duas pessoas.
+(Uso de agrupamento)
 */
 select c.funcao as cargo, round(avg(c.salario_base), 2) as media_salarial
 from cargo c
