@@ -1,10 +1,10 @@
--- Outras funções utilitárias
+-- Funções para a tabela cargo
 
 -- Função que atualiza o salário de um funcionário específico
-create or replace function atualizarSalarioBase(
+create or replace procedure atualizarSalarioBase(
   idCargo cargo.id%type,
   aumentoSalarial cargo.salario_base%type
-) returns void as $$
+)  as $$
 begin
   update cargo
   set salario_base = salario_base * (1 + (aumentoSalarial / 100)::numeric)
@@ -19,8 +19,7 @@ select * from cargo order by id;
 select * from funcionario;
 
 -- Função que atualiza o salário de todos os funcionários a partir de um valor percentual
-create or replace function atualizarTodosSalarios(percentual numeric) 
-returns void as $$
+create or replace procedure atualizarTodosSalarios(percentual numeric) as $$
 begin
   update cargo
   set salario_base = salario_base * (1 + percentual/100)::numeric;
