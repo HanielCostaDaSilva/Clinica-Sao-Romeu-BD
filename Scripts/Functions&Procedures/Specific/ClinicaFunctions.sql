@@ -14,6 +14,7 @@ BEGIN
 	SELECT AVG(percentual_bonus) INTO mediaBonusSalario FROM funcionario;
 	SELECT nome INTO pacienteMaisNovo FROM paciente ORDER BY Data_Nascimento DESC LIMIT 1;
 	SELECT nome INTO pacienteMaisVelho FROM paciente ORDER BY Data_Nascimento LIMIT 1;
+	RETURN;
 END;
 $$
 LANGUAGE 'plpgsql';
