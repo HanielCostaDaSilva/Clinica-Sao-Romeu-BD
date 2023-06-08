@@ -14,9 +14,9 @@ BEGIN
 	SELECT AVG(salario_base) INTO mediaSalarioBase FROM funcionario;
 	SELECT nome INTO pacienteMaisNovo FROM paciente ORDER BY Data_Nascimento DESC LIMIT 1;
 	SELECT nome INTO pacienteMaisVelho FROM paciente ORDER BY Data_Nascimento LIMIT 1;
-	RETURN;
+	RETURN NEXT;
 END;
 $$
 LANGUAGE 'plpgsql';
 
-select dadosEstatisticosClinica();
+SELECT dadosEstatisticosClinica();
