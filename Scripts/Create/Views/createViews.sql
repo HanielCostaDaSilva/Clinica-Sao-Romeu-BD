@@ -1,3 +1,4 @@
+-- Views da clínica São Romeu
 /*View relacionada a demonstrar  quais os médicos da clínica e suas respectivas especialidades */
 
 create or replace View catalogoMedico as

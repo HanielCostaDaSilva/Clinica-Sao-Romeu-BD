@@ -1,5 +1,5 @@
 /*!!! You need active all triggers!!!*/
--- Teste com Views que permitem inserção
+-- Testes com Views que permitem inserção
 
 insert into catalogoespecialidade values('Ortopedista','R$ 159.34');
 insert into catalogoespecialidade values('Demartologia','R$ 302.40');

@@ -1,4 +1,4 @@
--- Funções para a tabela cargo
+-- Procedures para a tabela Cargo
 
 -- Função que atualiza o salário de um funcionário específico
 create or replace procedure atualizarSalarioBase(

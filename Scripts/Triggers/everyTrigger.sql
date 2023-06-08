@@ -94,7 +94,7 @@ begin
     
     if idCargoExistente is null then
         --Referente a inserção
-        select max(coalesce(cargo.id, 0)) + 1 into novoID from cargo;
+        select coalesce(max(cargo.id), 0)) + 1 into novoID from cargo;
         new.id := novoID;
         new.salario_base := new.salario_base; 
         
@@ -236,7 +236,7 @@ for each ROW
 execute PROCEDURE inserirEspecialidadeCatalogo();
 
 
-/* catalogoEspecialidade trigger */
+/* funcionariosEncarregados trigger */
 
 create or replace trigger InsertfuncionariosEncarregados
 instead of insert 

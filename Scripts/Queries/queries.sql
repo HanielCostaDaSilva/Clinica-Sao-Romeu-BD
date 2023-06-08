@@ -139,4 +139,4 @@ where p.Data_Nascimento <= current_date - INTERVAL '60 years';
 
 /* Justificativa: a consulta foi reescrita com LEFT JOIN para incluir todos os pacientes,
 mesmo aqueles que não possuem número de telefone cadastrado. Isso permite
-obter pacientes e seus números de telefone, caso existam. */
+obter todos os pacientes e seus números de telefone, caso existam. */

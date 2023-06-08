@@ -6,10 +6,19 @@
 
 <hr />
 
-<h2>Qual o problema a ser solucionado.</h2>
+<h2>Qual o problema a ser solucionado</h2>
 <p> 
 A clínica médica São Romeu é uma instituição localizada em São Miguel do Taipu. Embora seja uma das clínicas mais buscadas pelos moradores locais, ela registra todos os seus dados de maneira arcaica, mas não por muito tempo, pois ela deseja migrar o quanto antes para um sistema informatizado, a fim de gerenciar e melhorar o atendimento para seus pacientes.
 </p>
+<hr>
+<h2>Como executar corretamente</h2>
+<ul>
+    <li>Primeiro: rodar os arquivos CREATE;</li>
+    <li>Segundo: os Triggers;</li>
+    <li>Terceiro: Functions e Procedures;</li>
+    <li>Quarto: Inserts;</li>
+    <li>Quinto: então será possível fazer boas consultas, como as do arquivo queries.sql.</li>
+</ul>
 
 <hr />
 

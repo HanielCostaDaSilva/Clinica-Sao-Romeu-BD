@@ -1,3 +1,5 @@
+-- Procedures para a tabela Especialidade
+
 create or replace procedure atualizarPrecoConsulta(
     p_especialidade_id INT,
     p_novo_preco decimal(10,2)
@@ -17,7 +19,7 @@ begin
         raise notice 'Preço da consulta atualizado com sucesso!';
     else
         raise exception 'Especialidade não encontrada.'
-		using hint = 'verifique se o id está correto.';
+		using hint = 'Verifique se o id está correto.';
     end if;
 end;
 $$ language plpgsql;

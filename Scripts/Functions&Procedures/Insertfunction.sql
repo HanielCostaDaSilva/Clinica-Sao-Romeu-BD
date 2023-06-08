@@ -1,4 +1,4 @@
--- Funções usadas na Base de Dados da clínica
+-- Funções usadas na inserção na Base de Dados da clínica
 
 CREATE or replace Function inserirEspecialidade (
     descricaoInserir Varchar(45),

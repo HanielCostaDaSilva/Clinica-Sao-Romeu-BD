@@ -1,3 +1,5 @@
+-- Funções para a tabela Funcionario
+
 create or replace function mostrarSalariosFuncionarios()
 returns table (matricula CHAR(50), nome varchar(40), funcao varchar(25),
 			   percentual_bonus integer, salario_base numeric)
