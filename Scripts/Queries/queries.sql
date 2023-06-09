@@ -76,15 +76,23 @@ group by f.nome
 having count(*) >= 2;
 
 /*
-7- Obtenha a média de salário por cargo na clínica, listando o nome do cargo
-e a média salarial. Apenas inclua os cargos que tenham mais de duas pessoas.
+7- Obtenha a contagem de pacientes agrupados por faixa etária, incluindo as faixas de
+idade de 0 a 18 anos, 19 a 30 anos, 31 a 45 anos, 46 a 55 anos e acima de 55 anos.
+Os resultados devem ser ordenados em ordem decrescente de quantidade de pacientes em cada faixa etária.
 (Uso de agrupamento)
 */
-select c.funcao as cargo, round(avg(c.salario_base), 2) as media_salarial
-from cargo c
-	join funcionario f ON c.id = f.idcargo
-group by c.funcao
-having count(f.matricula) > 1;
+select
+    case
+        when extract(year from age(Data_Nascimento)) between 0 and 18 then '0-18 anos'
+        when extract(year from age(Data_Nascimento)) between 19 and 30 then '19-30 anos'
+        when extract(year from age(Data_Nascimento)) between 31 and 45 then '31-45 anos'
+        when extract(year from age(Data_Nascimento)) between 46 and 55 then '46-55 anos'
+        else 'Mais de 55 anos'
+    end as faixa_etaria,
+    count(*) as quantidade
+from paciente
+group by faixa_etaria
+order by quantidade desc;
 
 /*
 8- Liste os médicos que também são pacientes. (Uso de uma operação com conjuntos)

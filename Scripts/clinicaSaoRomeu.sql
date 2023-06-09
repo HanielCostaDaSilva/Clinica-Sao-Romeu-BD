@@ -475,7 +475,6 @@ for each ROW
 execute PROCEDURE inserirfuncionariosEncarregados();
 
 -- Funções usadas na inserção na Base de Dados da clínica
-
 CREATE or replace Function inserirEspecialidade (
     descricaoInserir Varchar(45),
     preco_consultaInserir Decimal(10, 2)
@@ -658,27 +657,39 @@ CREATE or replace Function inserirPaciente(
     end;
 $$ LANGUAGE 'plpgsql';
 
--- Função que mostra dados estatísticos da Clínica
-CREATE OR REPLACE FUNCTION dadosEstatisticosClinica() RETURNS TABLE (
-	totalPacientes		INT,
-	totalMedicos		INT,
-	mediaSalarioBase		NUMERIC(10,2),
-	pacienteMaisNovo	VARCHAR(50),
-	pacienteMaisVelho	VARCHAR(50)
-	) 
-AS
+-- Função com dados estatísticos da Clínica
+create or replace function dadosEstatisticosClinica() returns table (
+    total_pacientes        int,
+    total_medicos          int,
+    media_salario_base     numeric(10,2),
+    paciente_mais_novo     varchar(50),
+    paciente_mais_velho    varchar(50),
+	media_idade_pacientes  NUMERIC(10,2),
+    menor_salario          numeric(10,2),
+    maior_salario          numeric(10,2),
+    gastos_salariais       numeric(10,2)
+) -- As colunas são os outputs da função
+as
 $$
-BEGIN
-	SELECT COUNT(*) INTO totalPacientes FROM paciente;
-	SELECT COUNT(*) INTO totalMedicos FROM medico;
-	SELECT AVG(salario_base) INTO mediaSalarioBase FROM cargo;
-	SELECT nome INTO pacienteMaisNovo FROM paciente ORDER BY Data_Nascimento DESC LIMIT 1;
-	SELECT nome INTO pacienteMaisVelho FROM paciente ORDER BY Data_Nascimento LIMIT 1;
-END;
+begin -- Todas as consultas serão jogadas para cada variável/parâmetro
+    select COUNT(*) into total_pacientes from paciente;
+    select COUNT(*) into total_medicos from medico;
+    select round(AVG(c.salario_base),2) into media_salario_base from funcionario f join cargo c on f.idcargo = c.id;
+    select nome into paciente_mais_novo from paciente order by Data_Nascimento DESC LIMIT 1;
+    select nome into paciente_mais_velho from paciente order by Data_Nascimento LIMIT 1;
+	SELECT round(AVG(extract(year from age(Data_Nascimento))),2) INTO media_idade_pacientes FROM paciente;
+    select MIN(c.salario_base) into menor_salario from funcionario f join cargo c on f.idcargo = c.id;
+    select MAX(c.salario_base) into maior_salario from funcionario f join cargo c on f.idcargo = c.id;
+    select (SUM(c.salario_base)+SUM(f.percentual_bonus)) into gastos_salariais from funcionario f join cargo c on f.idcargo = c.id;
+    
+    return NEXT;
+	return;
+end;
 $$
-LANGUAGE 'plpgsql';
+language 'plpgsql';
+--drop FUNCTION dadosestatisticosclinica()
 
-select dadosEstatisticosClinica();
+select * from dadosEstatisticosClinica();
 
 -- Procedures para a tabela Cargo
 
@@ -924,15 +935,23 @@ group by f.nome
 having count(*) >= 2;
 
 /*
-7- Obtenha a média de salário por cargo na clínica, listando o nome do cargo
-e a média salarial. Apenas inclua os cargos que tenham mais de duas pessoas.
+7- Obtenha a contagem de pacientes agrupados por faixa etária, incluindo as faixas de
+idade de 0 a 18 anos, 19 a 30 anos, 31 a 45 anos, 46 a 55 anos e acima de 55 anos.
+Os resultados devem ser ordenados em ordem decrescente de quantidade de pacientes em cada faixa etária.
 (Uso de agrupamento)
 */
-select c.funcao as cargo, round(avg(c.salario_base), 2) as media_salarial
-from cargo c
-	join funcionario f ON c.id = f.idcargo
-group by c.funcao
-having count(f.matricula) > 1;
+select
+    case
+        when extract(year from age(Data_Nascimento)) between 0 and 18 then '0-18 anos'
+        when extract(year from age(Data_Nascimento)) between 19 and 30 then '19-30 anos'
+        when extract(year from age(Data_Nascimento)) between 31 and 45 then '31-45 anos'
+        when extract(year from age(Data_Nascimento)) between 46 and 55 then '46-55 anos'
+        else 'Mais de 55 anos'
+    end as faixa_etaria,
+    count(*) as quantidade
+from paciente
+group by faixa_etaria
+order by quantidade desc;
 
 /*
 8- Liste os médicos que também são pacientes. (Uso de uma operação com conjuntos)
