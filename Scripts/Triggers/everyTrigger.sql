@@ -122,8 +122,7 @@ begin
     -- Checa se é um Update funcionário que está sendo adicionado
     if TG_OP = 'UPDATE' then
         -- Houve alteração no supervisor
-
-            if new.supervisor <> all(supervisores) then
+            if new.supervisor not in (select unnest(supervisores)) then
                 update Funcionario
                 set percentual_bonus = percentual_bonus + bonusSupervisor
                 where matricula = new.supervisor;
@@ -132,15 +131,17 @@ begin
             -- Verifica se o antigo supervisor não é mais um supervisor
             select not exists (select 1 from funcionario where matricula = old.supervisor and matricula <> new.supervisor) into antigoSupervisor;
             if antigoSupervisor then
-                update Funcionario
-                set percentual_bonus = greatest(percentual_bonus - bonusSupervisor, 0)
-                where matricula = old.supervisor;
+				if (select count(*) from funcionario where supervisor = old.supervisor) = 0 then
+					supervisores := array_remove(supervisores, old.supervisor);
+					update Funcionario
+					set percentual_bonus = greatest(percentual_bonus - bonusSupervisor, 0)
+					where matricula = old.supervisor;
             end if;
 
     -- Caso seja um novo funcionário 
     elsif TG_OP = 'INSERT' then 
         -- Checa se é um novo supervisor, caso seja, aplica o bônus.
-        if new.supervisor <> all(supervisores) then
+        if new.supervisor not in (select unnest(supervisores)) then
             update Funcionario
             set percentual_bonus = percentual_bonus + bonusSupervisor
             where matricula = new.supervisor;
@@ -148,12 +149,10 @@ begin
     
     elsif TG_OP = 'DELETE' then
         select not exists (select 1 from funcionario where matricula = old.supervisor and matricula <> new.supervisor) into antigoSupervisor;
-    
             if antigoSupervisor then
                 update Funcionario
                 set percentual_bonus = greatest(percentual_bonus - bonusSupervisor, 0)
-                where matricula = old.supervisor;
-            
+                where matricula = old.supervisor; 
         end if;
     end if;
 
@@ -211,10 +210,11 @@ EXECUTE PROCEDURE checkDatas();
 
 -- Trigger para operações de UPDATE na coluna "supervisor"
 CREATE TRIGGER ChecarBonusSupervisor_Update
-BEFORE UPDATE ON funcionario
+AFTER UPDATE ON funcionario
 FOR EACH ROW
-WHEN (OLD.supervisor IS DISTINCT FROM NEW.supervisor)
+WHEN (NEW.supervisor IS DISTINCT FROM OLD.supervisor)
 EXECUTE PROCEDURE checarAumentoBonus();
+-- drop trigger ChecarBonusSupervisor_Update on funcionario;
 
 -- Trigger para operações de INSERT na coluna "supervisor"
 CREATE TRIGGER ChecarBonusSupervisor_Insert

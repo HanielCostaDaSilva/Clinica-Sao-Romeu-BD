@@ -357,30 +357,41 @@ begin
     select array_agg(distinct supervisor) into supervisores from funcionario where supervisor is not null;
 	
     --Checa se é um Update funcionário que está sendo adicionado
-    if TG_OP ='UPDATE' then
-    	-- houve alteração no supervisor.
-        if new.supervisor is distinct from old.supervisor then 
-            -- Houve apenas  a troca entre supervisores 
-            if new.supervisor not in(select unnest(supervisores)) then
+    if TG_OP = 'UPDATE' then
+        -- Houve alteração no supervisor
+            if new.supervisor not in (select unnest(supervisores)) then
                 update Funcionario
                 set percentual_bonus = percentual_bonus + bonusSupervisor
                 where matricula = new.supervisor;
             end if;
-            --No final, o antigo supervisor perderá o bônus
-            update Funcionario
-            set percentual_bonus= greatest(percentual_bonus - bonusSupervisor, 0)
-            where matricula= old.supervisor;
-        end if;
+            
+            -- Verifica se o antigo supervisor não é mais um supervisor
+            select not exists (select 1 from funcionario where matricula = old.supervisor and matricula <> new.supervisor) into antigoSupervisor;
+            if antigoSupervisor then
+				if (select count(*) from funcionario where supervisor = old.supervisor) = 0 then
+					supervisores := array_remove(supervisores, old.supervisor);
+					update Funcionario
+					set percentual_bonus = greatest(percentual_bonus - bonusSupervisor, 0)
+					where matricula = old.supervisor;
+            end if;
 		
     -- Caso seja um novo funcionário 
-    elsif TG_OP='INSERT' then 
-        --checamos se é um novo supervisor, caso seja, aplicamos o bonus.
+    elsif TG_OP = 'INSERT' then 
+        -- Checa se é um novo supervisor, caso seja, aplica o bônus.
         if new.supervisor not in (select unnest(supervisores)) then
             update Funcionario
             set percentual_bonus = percentual_bonus + bonusSupervisor
             where matricula = new.supervisor;
-	    end if; 
-	end if;
+        end if;
+    
+    elsif TG_OP = 'DELETE' then
+        select not exists (select 1 from funcionario where matricula = old.supervisor and matricula <> new.supervisor) into antigoSupervisor;
+            if antigoSupervisor then
+                update Funcionario
+                set percentual_bonus = greatest(percentual_bonus - bonusSupervisor, 0)
+                where matricula = old.supervisor;
+            end if;
+        end if;
     return new;
 end;
 $$ language 'plpgsql';
@@ -432,10 +443,27 @@ on FUNCIONARIO
 FOR EACH ROW
 EXECUTE PROCEDURE checkDatas();
 
-create or replace trigger ChecarBonusSupervisor
-before insert or update on funcionario
-for each row
-execute procedure checarAumentoBonus();
+-- Trigger para operações de UPDATE na coluna "supervisor"
+CREATE TRIGGER ChecarBonusSupervisor_Update
+AFTER UPDATE ON funcionario
+FOR EACH ROW
+WHEN (NEW.supervisor IS DISTINCT FROM OLD.supervisor)
+EXECUTE PROCEDURE checarAumentoBonus();
+-- drop trigger ChecarBonusSupervisor_Update on funcionario;
+
+-- Trigger para operações de INSERT na coluna "supervisor"
+CREATE TRIGGER ChecarBonusSupervisor_Insert
+BEFORE INSERT ON funcionario
+FOR EACH ROW
+WHEN (NEW.supervisor IS NOT NULL)
+EXECUTE PROCEDURE checarAumentoBonus();
+
+-- Trigger para operações de DELETE na coluna "supervisor"
+CREATE TRIGGER ChecarBonusSupervisor_Delete
+BEFORE DELETE ON funcionario
+FOR EACH ROW
+WHEN (OLD.supervisor IS NOT NULL)
+EXECUTE PROCEDURE checarAumentoBonus();
 
 /*Especialidade*/
 create trigger insertNewEspecialidade 
