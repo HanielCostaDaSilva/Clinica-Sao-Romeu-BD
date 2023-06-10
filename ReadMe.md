@@ -2,7 +2,7 @@
 
 <h2>Objetivo</h2>
 
-<p>O principal objetivo desse projeto é a aprendizagem da linguagem <bolder> PL/SQL </bolder>.</p>
+<p>O principal objetivo desse projeto é a aprendizagem da linguagem <strong>PL/SQL</strong> como projeto final da disciplina Banco de Dados 2.</p>
 
 <hr />
 
@@ -13,6 +13,7 @@ A clínica médica São Romeu é uma instituição localizada em São Miguel do 
 <hr>
 <h2>Como executar corretamente</h2>
 <ul>
+    <h4><i>Rodar o arquivo geral: clinicaSaoRomeu.sql OU seguir o passo a passo a seguir.</i></h4>
     <li>Primeiro: rodar os arquivos CREATE;</li>
     <li>Segundo: os Triggers;</li>
     <li>Terceiro: Functions e Procedures;</li>
@@ -27,9 +28,8 @@ A clínica médica São Romeu é uma instituição localizada em São Miguel do 
 <ul >
     <li>Registrar os pacientes. </li>
     <li>Registrar os Funcionários e seus respectivos supervisores. </li>
-    <li>Registrar os funcionários responsáveis pelo cadastro. </li>
     <li>Fornecer um catálogo de todas as especialidades ofertadas. </li>
-    <li>Registrar informações sobre os exames. </li>
+    <li>Registrar informações sobre os exames.</li>
     <li>Cadastrar os remédios, individualmente, de cada receita. </li>
     <li>Possuir permissões de usuários. </li>
     <li>Emitir relatórios para diferentes casos. </li>
@@ -60,8 +60,5 @@ Haniel Costa
 Yuri Souza
 </a>
 </li>
-
-
 </ul> 
-
 <hr />

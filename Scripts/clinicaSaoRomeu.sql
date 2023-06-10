@@ -135,22 +135,26 @@ ALTER TABLE PRESCRICAO ADD CONSTRAINT checkIdRemedio check (idRemedio > 0);
 
 -- Índices para o base de dados da clínica São Romeu
 
-/* Índice para os CPFs dos paciente nas receitas médicas */
+-- Índice para os CPFs dos paciente nas receitas médicas
 create index idx_cpfPaciente
 on receita (cpfPaciente);
+/* Justificativa: acessar os dados de determinado paciente mais rapidamente dentro da tabela RECEITA */
 
-/* Índice para otimizar as pesquisas via data de realização
-da consulta médica */
+-- Índice para otimizar as pesquisas via data de realização da consulta médica
 create index idx_consultas_realizadas
 on receita (data_realizacao);
+/* Justificativa: agrupar o acesso às receitas de acordo com a data de realização das mesmas */
 
-/* Índice no estado de emergência do paciente */
+-- Índice no estado de emergência do paciente
 create index idx_estado_paciente
 on paciente (estado_urgencia);
+/* Justificativa: de acordo com os estado de urgência, é possível saber quais são os pacientes que
+precisem de mais atenção (os mais graves). Por isso, acessar mais rapidamente esta condição
+é de extrema importância para o contexto da clínica. */
 
 -- Views da clínica São Romeu
-/*View relacionada a demonstrar  quais os médicos da clínica e suas respectivas especialidades */
 
+/*View relacionada a demonstrar  quais os médicos da clínica e suas respectivas especialidades */
 create or replace View catalogoMedico as
 select f.matricula, m.crm, f.nome, e.descricao as "Especialidade"
 from funcionario f inner join medico m on f.matricula = m.matricula 
@@ -193,7 +197,6 @@ where prec.idReceita = (
     from prescricao
     where idRemedio = prec.idRemedio
 );
-
 --drop view remediosReceitados;
 select * from RemediosReceitados;
 
@@ -256,9 +259,7 @@ begin
     exception
       when unique_violation then 
         raise exception 'Essa especialidade Já havia sido adicionada anteriormente!'  USING ERRCODE = -50002;
-    
 end;
-
 $$ language 'plpgsql';
 
 
@@ -266,7 +267,6 @@ $$ language 'plpgsql';
 create or replace function checkDatas() 
 returns trigger as $$
 begin
-
     IF AGE(new.Data_Nascimento) <= interval '18 years' then 
         raise exception  'O funcionário não possui idade suficiente para trabalhar!';
 	end if;
@@ -290,7 +290,6 @@ BEGIN
                 USING HINT = 'Insira um novo salário menor que: R$ ' || limiteSalarioSuperior,
                       ERRCODE = '70001';
         end if;
-
         raise notice 'O salário base da função % sofreu um aumento.', new.funcao;
         raise notice 'Salário anterior =====> %', old.salario_base;
         raise notice 'Salário Novo =====> %', new.salario_base;
@@ -298,9 +297,7 @@ BEGIN
         raise notice '';
 
     ELSIF (new.salario_base < old.salario_base) THEN
-        
         limiteSalarioInferior :=  old.salario_base - (old.salario_base * porcentagemLim); 
-
         IF (new.salario_base not between limiteSalarioInferior and old.salario_base ) THEN
             raise EXCEPTION 'O novo salário extrapolou o limite inferior de % por cento.', (porcentagemLim * 100)
                 USING HINT = 'Insira um novo salário maior que: R$ ' || limiteSalarioInferior,
@@ -335,13 +332,11 @@ begin
         select coalesce(max(cargo.id), 0) + 1 into novoID from cargo;
         new.id := novoID;
         new.salario_base := new.salario_base; 
-        
         raise notice ' A função % foi inserida com o salário base: R$ %', new.funcao, new.salario_base;
     else
         --Referente a atualização
         update Cargo set salario_base = new.salario_base where Cargo.id = idCargoExistente;
         raise notice ' o salario base da função % foi atualizado para: R$ %', new.funcao, new.salario_base;
-
     end if;
 
     return new;
@@ -408,15 +403,14 @@ create or replace function inserirEspecialidadeCatalogo() returns trigger as $$
     begin
       SELECT cast(regexp_replace(new.preco, '[^0-9.]', '', 'g') AS DECIMAL) into precoDecimal;
       insert into Especialidade values(0, new.descricao, precoDecimal);
-      return new;
 
+      return new;
     end;
 $$ language 'plpgsql'; 
 
 create or replace function inserirfuncionariosEncarregados() returns trigger as $$
     declare
         newCargoId integer;
-
         begin
             select Cargo.id into newCargoId 
             from Cargo where lower(new.funcao) = lower(Cargo.funcao);
@@ -588,9 +582,7 @@ create or replace function inserirReceitaMedica(
         receitaId integer;
 		 v_remedio TEXT;  
     Begin
-
         select COALESCE(max(id) +1, 1) into receitaId from Receita;
-
         INSERT INTO Receita  VALUES (receitaId, MatMedico, CPFPaciente,Data_Realizacao,Data_Validade);
 
         if array_length(remediosReceitados,1) > 0 then 
