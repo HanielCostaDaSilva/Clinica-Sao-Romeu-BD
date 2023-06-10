@@ -351,12 +351,13 @@ $$ language 'plpgsql';
 /*Este trigger deverá garantir que um supervisor receba um bônus de 15% no seu salario, e verificar caso ele tenha sido excluído da lista de supervisores.  Se isso acontecer, ele perderá o bônus 15%*/
 create or replace function checarAumentoBonus() returns trigger as $$
 declare
-    bonusSupervisor integer =15;
+    bonusSupervisor integer = 15;
     supervisores text[];
+    antigoSupervisor boolean;
 begin
     select array_agg(distinct supervisor) into supervisores from funcionario where supervisor is not null;
-	
-    --Checa se é um Update funcionário que está sendo adicionado
+
+    -- Checa se é um Update funcionário que está sendo adicionado
     if TG_OP = 'UPDATE' then
         -- Houve alteração no supervisor
             if new.supervisor not in (select unnest(supervisores)) then
@@ -373,8 +374,9 @@ begin
 					update Funcionario
 					set percentual_bonus = greatest(percentual_bonus - bonusSupervisor, 0)
 					where matricula = old.supervisor;
-            end if;
-		
+            	end if;
+			end if;
+			
     -- Caso seja um novo funcionário 
     elsif TG_OP = 'INSERT' then 
         -- Checa se é um novo supervisor, caso seja, aplica o bônus.
@@ -389,9 +391,9 @@ begin
             if antigoSupervisor then
                 update Funcionario
                 set percentual_bonus = greatest(percentual_bonus - bonusSupervisor, 0)
-                where matricula = old.supervisor;
-            end if;
-        end if;
+                where matricula = old.supervisor; 
+        	end if;
+    end if;
     return new;
 end;
 $$ language 'plpgsql';

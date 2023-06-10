@@ -136,6 +136,7 @@ begin
 					update Funcionario
 					set percentual_bonus = greatest(percentual_bonus - bonusSupervisor, 0)
 					where matricula = old.supervisor;
+				end if;
             end if;
 
     -- Caso seja um novo funcionário 
