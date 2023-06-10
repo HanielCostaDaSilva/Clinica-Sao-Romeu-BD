@@ -122,13 +122,13 @@ begin
     -- Checa se é um Update funcionário que está sendo adicionado
     if TG_OP = 'UPDATE' then
         -- Houve alteração no supervisor
-        if new.supervisor <> old.supervisor then 
-            -- Houve apenas a troca entre supervisores 
+
             if new.supervisor <> all(supervisores) then
                 update Funcionario
                 set percentual_bonus = percentual_bonus + bonusSupervisor
                 where matricula = new.supervisor;
             end if;
+            
             -- Verifica se o antigo supervisor não é mais um supervisor
             select not exists (select 1 from funcionario where matricula = old.supervisor and matricula <> new.supervisor) into antigoSupervisor;
             if antigoSupervisor then
@@ -136,7 +136,7 @@ begin
                 set percentual_bonus = greatest(percentual_bonus - bonusSupervisor, 0)
                 where matricula = old.supervisor;
             end if;
-        end if;
+
     -- Caso seja um novo funcionário 
     elsif TG_OP = 'INSERT' then 
         -- Checa se é um novo supervisor, caso seja, aplica o bônus.
@@ -144,6 +144,16 @@ begin
             update Funcionario
             set percentual_bonus = percentual_bonus + bonusSupervisor
             where matricula = new.supervisor;
+        end if;
+    
+    elsif TG_OP = 'DELETE' then
+        select not exists (select 1 from funcionario where matricula = old.supervisor and matricula <> new.supervisor) into antigoSupervisor;
+    
+            if antigoSupervisor then
+                update Funcionario
+                set percentual_bonus = greatest(percentual_bonus - bonusSupervisor, 0)
+                where matricula = old.supervisor;
+            
         end if;
     end if;
 
@@ -199,10 +209,26 @@ on FUNCIONARIO
 FOR EACH ROW
 EXECUTE PROCEDURE checkDatas();
 
-create or replace trigger ChecarBonusSupervisor
-before insert or update on funcionario
-for each row
-execute procedure checarAumentoBonus();
+-- Trigger para operações de UPDATE na coluna "supervisor"
+CREATE TRIGGER ChecarBonusSupervisor_Update
+BEFORE UPDATE ON funcionario
+FOR EACH ROW
+WHEN (OLD.supervisor IS DISTINCT FROM NEW.supervisor)
+EXECUTE PROCEDURE checarAumentoBonus();
+
+-- Trigger para operações de INSERT na coluna "supervisor"
+CREATE TRIGGER ChecarBonusSupervisor_Insert
+BEFORE INSERT ON funcionario
+FOR EACH ROW
+WHEN (NEW.supervisor IS NOT NULL)
+EXECUTE PROCEDURE checarAumentoBonus();
+
+-- Trigger para operações de DELETE na coluna "supervisor"
+CREATE TRIGGER ChecarBonusSupervisor_Delete
+BEFORE DELETE ON funcionario
+FOR EACH ROW
+WHEN (OLD.supervisor IS NOT NULL)
+EXECUTE PROCEDURE checarAumentoBonus();
 
 /*Especialidade*/
 create trigger insertNewEspecialidade 
